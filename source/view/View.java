@@ -39,7 +39,7 @@ public class View extends JPanel {
 		
 		//load in the images
 		for (int i = 0; i < frameCount; i++) {
-			BufferedImage image = createImage("images/" + playerCharacter + "/Walk (" + (i+1) + ")" + ".png");
+			BufferedImage image = createImage("images/" + playerCharacter + "/Walk (" + (i+1) + ")" + ".png
 			pics[1][i] = image;
 			//pics[i] = image.getSubimage(0,0,imgWidth, imgHeight);
 		}
