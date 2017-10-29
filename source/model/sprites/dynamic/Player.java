@@ -14,10 +14,12 @@ public class Player extends Sprites {
 	private boolean invincibility; 
 	
 	//vars for decrementing and incrementing movement
-	private int deltaX = 5;
-	private int deltaY = 5;
+	private int deltaX = 10;
+	private int deltaY = 10;
 	//0 = player facing left, 1 = player facing right
 	private int direction = 1;
+	private int numOfCharacter = 2;
+	private int changeCharacterCount = 0;
 	
 	public Player(int xCoord, int yCoord) {	
 		super.xCoord = xCoord;
@@ -87,12 +89,22 @@ public class Player extends Sprites {
 		return score;
 	}
 	
+	
+	
 	public void setDirection(int newDirection) {
 		direction = newDirection;
 	}
 	
 	public void setInvincibility(boolean bool) {
 		this.invincibility = bool;
+	}
+	
+	public String getPlayerCharacter(int changeCharacterCount) {
+		if((changeCharacterCount % numOfCharacter) == 0) {
+			return "cat";
+		}else {
+			return "dog";
+		}
 	}
 	
 }

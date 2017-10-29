@@ -22,73 +22,75 @@ public class View extends JPanel{
 	//boolean determines player should animate
 	boolean animate = false;
 	
-	///get screen's dimensions
-	private double screenWidth = Toolkit.getDefaultToolkit().getScreenSize().getWidth();
-	private double screenHeight = Toolkit.getDefaultToolkit().getScreenSize().getHeight();
-	
 	double ratio = screenWidth/screenHeight; 
 	int imgWidth;
 	int imgHeight;
 	
+	public static int getImgwidth() {
+		return imgWidth;
+	}
+
 	//player's x and y coordinates
 	int playerX = 0;
 	int playerY = 0;
+  
 	//player's direction
 	int direct = 1;
+  
 	//ground 
 	Rectangle ground;
-	//******************
-	//Constructor
 	
-	public View(){
+	public View(int xBoundary, int yBoundary, String playerCharacter) {
 		//load in the cat images
 		pics = new BufferedImage[2][10];
 		
 		frame = new JFrame();
 		
 		//load in the images
-		for (int i = 0; i < frameCount; i++)
-		{
-			BufferedImage image = createImage("cat/Walk (" + (i+1) + ")" + ".png");
+		for (int i = 0; i < frameCount; i++) {
+			BufferedImage image = createImage("images/" + playerCharacter + "/Walk (" + (i+1) + ")" + ".png");
 			pics[1][i] = image;
 		}
 		
-		for (int i = 0; i < frameCount; i++)
-		{
+		for (int i = 0; i < frameCount; i++) {
 			pics[0][i] = flip(pics[1][i]);
 		}
 		
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		frame.setTitle("Questary Alpha");
-		
-		frame.setSize(new Dimension((int)screenWidth,(int)screenHeight));
-		setSize(new Dimension((int)screenWidth, (int)screenHeight));
+		frame.setSize(new Dimension(,(int)screenHeight));
+		setSize(new Dimension(model.getScreenHeight(), model.getScreenWidth()));
 		frame.setLocationRelativeTo(null);
 		frame.getContentPane().add(this);
 		frame.setVisible(true);
-		
 	}
 	
-	 //The String imageFile is the input to the method, and is the file name
-	 private BufferedImage createImage(String imageFile){
-	  BufferedImage bufferedImage;
-	  try {
-	  		bufferedImage = ImageIO.read(new File(imageFile));
-	  		return bufferedImage;
-	  	} catch (IOException e) {
-	  		System.out.println("Error with file upload");
-	  		e.printStackTrace();
-	  	}
-	  return null;
-	 }
-	 
-	 private BufferedImage flip(BufferedImage image){
+  //The String imageFile is the file name
+	private BufferedImage createImage(String imageFile) {
+		BufferedImage bufferedImage;
+		try {
+			bufferedImage = ImageIO.read(new File(imageFile));
+			return bufferedImage;
+		} catch (IOException except) {
+			System.out.println("Error with file upload");
+			except.printStackTrace();		
+		}
+		return null;
+	}
+	
+	//Override the JPanel's paint method
+	@Override
+	public void paint(Graphics graphic) {
+		picNum = (picNum + 1) % frameCount;
+		graphic.drawImage(pics[direction][picNum], playerX, playerY, imgWidth, imgHeight, this);
+		graphic.fillRect((int)ground.getX(), (int)ground.getY() + imgHeight, (int)ground.getWidth(), (int)ground.getHeight());
+	}
+		
+	private BufferedImage flip(BufferedImage image) {
 		 int width = image.getWidth();
 		 int height = image.getHeight();
-		 
 		 BufferedImage mimg = new BufferedImage(width, height, BufferedImage.TYPE_INT_ARGB);
-		 for(int y = 0; y < height; y++)
-		 {
+		 for(int y = 0; y < height; y++) {
 			 for(int lx = 0, rx = width-1; lx < width; lx++, rx--)
 			 {
 				 int p = image.getRGB(lx, y);
@@ -97,32 +99,10 @@ public class View extends JPanel{
 		 }
 		 return mimg;
 	 }
-	  
-	 //getter for the frame
-	 public JFrame getFrame(){
-		 return frame;
-	 }
-	 
-	//setter for the ground
-	public void setGroundImage(Rectangle ground){
-		this.ground = ground;
-	}
-	
-	//setter for picNum
-	public void setPicNum(){
-		if(animate)
-		{
-			picNum = (picNum + 1) % frameCount;
-		}
-	}
-	//setter for animation
-	public void setAnimation(boolean b){
-		animate = b;
-	}
-	
-	 //Override the JPanel's paint method
+  
+  	/* //Override the JPanel's paint method
 	 @Override
-	 public void paint(Graphics g){
+	 public void paint(Graphics g) {
 		 g.setColor(Color.blue);
 		 g.fillRect(playerX, playerY,imgWidth,imgHeight);
 		 
@@ -130,16 +110,42 @@ public class View extends JPanel{
 
 		 g.setColor(Color.gray);
 		 g.fillRect((int)ground.getX(), (int)ground.getY(), (int)ground.getWidth(), (int)ground.getHeight());
-	 }
-	 
-	//update the data and repaint the image
-	public void updateView(int playerX, int playerY, int width, int height, int direct){ 
+	 } */
+  
+  //update the image and repaint the image
+	public void updateView(int playerX, int playerY, int direction, String playerCharacter) {
 		this.playerX = playerX;
 		this.playerY = playerY;
-		this.imgWidth = width;
-		this.imgHeight = height;
-		this.direct = direct;
-		frame.repaint();		
+		this.direction = direction;
+		//load in the images
+		for (int i = 0; i < frameCount; i++) {
+			BufferedImage image = createImage("images/" + playerCharacter + "/Walk (" + (i + 1) + ")" + ".png");
+			pics[1][i] = image;
+			// pics[i] = image.getSubimage(0,0,imgWidth, imgHeight);
+		}
+		frame.repaint();
 	}
-		
+	  
+  
+	 //getter for the frame
+	 public JFrame getFrame() {
+		 return frame;
+	 }
+	 
+	//setter for the ground
+	public void setGroundImage(Rectangle ground) {
+		this.ground = ground;
+	}
+	
+	//setter for picNum
+	public void setPicNum() {
+		if(animate) {
+			picNum = (picNum + 1) % frameCount;
+		}
+	}
+	//setter for animation
+	public void setAnimation(boolean b) {
+		animate = b;
+	}
+  
 }
