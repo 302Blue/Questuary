@@ -1,77 +1,140 @@
-package model;
-
 import java.awt.Rectangle;
-import java.awt.event.KeyEvent;
-import java.awt.event.KeyListener;
-
-import javax.swing.JFrame;
-
-import model.sprites.dynamic.Enemy;
-import model.sprites.dynamic.Player;
-import model.sprites.fixed.Obstacle;
-import view.View;
+import java.awt.Toolkit;
 
 public class Model {
+
+	//get the screen's dimensions
+	final private double screenWidth = Toolkit.getDefaultToolkit().getScreenSize().getWidth();
+	final private double screenHeight = Toolkit.getDefaultToolkit().getScreenSize().getHeight();
 	
-	private Player player = new Player(100,500);
-	private View view;
 	private int xBoundary;
 	private int yBoundary;
+	private double screenRatio;
 	
-	private int groundX;
-	private int groundY;
-	private Rectangle ground;
+	//fixed gravity constant
+	private int gravity = 10;
 	
-	public Model() {
-		xBoundary = 1000;
-		yBoundary = 1000;
+	private Ground ground;
+	int groundOffSet = 100;
+	private Player player;
+	
+	//************************
+	//Constructor
+	public Model(){
 		
-		groundX = 0;
-		groundY = 500;
-		ground = new Rectangle(groundX,groundY,xBoundary, 1);
-
+		//get the screen's ratio
+		screenRatio = screenWidth/screenHeight;
+		int playerWidth = (int) (screenWidth * 0.1);
+		int playerHeight = (int) (playerWidth * screenRatio);
+		
+		//set the boundaries
+		xBoundary = (int)screenWidth - playerWidth;
+		yBoundary = (int)screenHeight - playerHeight;
+		
+		//create Player object
+		player = new Player(100,200,playerWidth,playerHeight, gravity);
+		//create Ground object
+		ground = new Ground(0, (int)(screenHeight - groundOffSet),(int)(screenWidth),groundOffSet);
 	}
 	
-	public int getXBoundary() {
+	//************************
+	//Methods
+	
+	//getters for the boundaries
+	public int getXBoundary(){
 		return xBoundary;
 	}
-	
-	public int getYBoundary() {
+	public int getYBoundary(){
 		return yBoundary;
-		
 	}
 	
-	public int getPlayerX() {
-		return player.getX();
+	//getter for player dimensions
+	public double getPlayerWidth(){
+		return player.getWidth();
+	}
+	public double getPlayerHeight(){
+		return player.getHeight();
 	}
 	
-	public int getPlayerY() {
-		return player.getY();
+	//getter for player's coordinates
+	public int getPlayerX(){
+		return (int) player.getX();
+	}
+	public int getPlayerY(){
+		return (int) player.getY();
 	}
 	
-	//get ground Rectangle;
+	//getter for ground
 	public Rectangle getGround(){
 		return ground;
-	}	
+	}
 	
-	public int getPlayerDirection() {
-		return player.getDirection();
-	}
-
 	//move the player
-	public void incrementX(){
-		player.incrementX();
+	public void movePlayer(){
+		player.move();
 	}
-	public void decrementX(){
-		player.decrementX();
+	
+	//setter for player's dx
+	public void playerMoveLeft(){
+		player.setDirection(0);
+		//check if player is going out of x bound
+		if(player.getX() >= 0)
+		{
+			System.out.println("Boundary invalid " + xBoundary);
+			player.moveLeft();
+			System.out.println("ground" + ground.getWidth());
+		}
+		//if out of bound then don't increment the x
+		else
+		{
+			System.out.println("Boundary invalid 0");
+			System.out.println("Player is out of Boundary to Left");
+			player.setDxOff();
+		}
 	}
-	public void setDirection(int i){
-		player.setDirection(i);
+	public void playerMoveRight(){
+		player.setDirection(1);
+		//check if player is going out of x bound
+		if(player.getX() <= xBoundary)
+		{
+			System.out.println("Boundary invalid " + xBoundary);
+			player.moveRight();
+			System.out.println("ground" + ground.getWidth());
+		}
+		else
+		{
+			System.out.println("Boundary invalid " + xBoundary);
+			System.out.println("Player is out of Boundary to Right");
+			player.setDxOff();
+		}
 	}
-	public int getDirection(){
+	public void setPlayerDxOff(){
+		player.setDxOff();
+	}
+	
+	//getter for player's direction
+	public int getPlayerDirection(){
 		return player.getDirection();
 	}
-	public String getDirectState(){
-		return player.getDirectionState();
+	public String getPlayerDirectionString(){
+		return player.getDirectionString();
+	}
+	
+	//getters for player falling and jumping
+	public boolean isPlayerJumping(){
+		return player.getJumping();
+	}
+	public boolean isPlayerFalling(){
+		return player.getFalling();
+	}
+	
+	//set the player to jumping mode
+	public void makePlayerJump(){
+		player.setJumping();
+	}
+	
+	//checks if it is colliding
+	public void gravity(){
+		player.gravityEffect(ground);
 	}
 }
