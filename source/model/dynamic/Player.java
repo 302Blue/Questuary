@@ -19,7 +19,7 @@ public class Player extends DynamicObject {
 	//health of the player
 	private int health = 3;
 	// The state of the player
-	private String state = "Cat";
+	private String state = "researcher";
 
 	// Assuming only player can jump and fall
 	private int maxDy = 15;
@@ -194,11 +194,11 @@ public class Player extends DynamicObject {
 	public String getPlayerCharacter(int changeCharacterCount) {
 		// TODO Auto-generated method stub
 		if (changeCharacterCount % numOfCharacter == 0) {
-			maxJumpingHeight = height / 2;
-			state = "cat";
-			return "cat";
+			maxJumpingHeight = height/2;
+			state = "researcher";
+			return "researcher";
 		} else {
-			maxJumpingHeight = height;
+			maxJumpingHeight = height*2;
 			state = "bird";
 			return "bird";
 		}

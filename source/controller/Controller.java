@@ -189,6 +189,7 @@ public class Controller {
 			else if (keys.contains(KeyEvent.VK_DOWN) && keys.contains(KeyEvent.VK_RIGHT)) {
 				// System.exit(0);
 				// changes game mode to switching player
+				view.changeCharacterMode();
 				model.setChangePlayerMode();
 			} else if (keys.contains(KeyEvent.VK_UP) && keys.contains(KeyEvent.VK_RIGHT)) {
 				model.changeRoom();
