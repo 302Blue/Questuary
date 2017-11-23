@@ -1,9 +1,14 @@
 package model;
 
 import java.awt.Rectangle;
+import java.util.ArrayList;
+import java.util.Random;
 import java.util.concurrent.ThreadLocalRandom;
 
 import model.dynamic.Player;
+import model.dynamic.Enemy;
+import model.dynamic.EnemyCrab;
+import model.dynamic.EnemyOsprey;
 import model.fixed.Collectible;
 import model.fixed.Platform;
 
@@ -30,6 +35,10 @@ public class Model {
 	// needed fields
 	private Platform ground;
 	private Platform platform1;
+	
+	//arraylist containing the platform objects
+	private ArrayList<Platform> platforms = new ArrayList<Platform>();
+	
 	int groundOffSet = 100;
 	private Player player;
 	// fixed gravity constant
@@ -40,6 +49,8 @@ public class Model {
 	// starting positions
 	private int startingY;
 	private int startingX;
+	
+	private ArrayList<Enemy> enemies = new ArrayList<Enemy>();
 
 	// *************************************************
 	// Constructor
@@ -64,6 +75,25 @@ public class Model {
 		ground = new Platform(-500, (int) (screenHeight - groundOffSet), (int) (screenWidth * 2), groundOffSet);
 		platform1 = new Platform((int) ThreadLocalRandom.current().nextInt(300, 1000),
 				(int) ThreadLocalRandom.current().nextInt(765, 900), 350, 50);
+		
+		//make 5 platforms
+		for(int i = 0; i < 5; i++)
+		{
+			Platform platform = new Platform((int) ThreadLocalRandom.current().nextInt(300, 1000),
+					(int) ThreadLocalRandom.current().nextInt(765, 900), 350, 50);
+			platforms.add(platform);
+		}
+		//make enemy crabs on the platforms
+		//random for crabs
+		Random random = new Random(System.currentTimeMillis());
+		for(Platform platform : platforms)
+		{
+			if(random.nextInt(3) == 0)
+			{
+				enemies.add(new EnemyCrab(platform));
+			}
+		}
+		enemies.add(new EnemyOsprey((int)screenWidth, (int)screenHeight));
 	}
 
 	// *************************************************
@@ -76,6 +106,20 @@ public class Model {
 	 */
 	public void movePlayer() {
 		player.move();
+	}
+	
+	public void moveEnemies() {
+		for(Enemy enemy : enemies)
+		{
+			if(enemy.getY() > screenHeight)
+			{
+				enemies.remove(enemy);
+			}
+			else
+			{
+				enemy.move();
+			}
+		}
 	}
 
 	/**
@@ -133,7 +177,18 @@ public class Model {
 		boolean stillFalling;
 		stillFalling = player.gravityEffect(ground);
 		if (stillFalling) {
-			player.gravityEffect(platform1);
+			//player.gravityEffect(platform1);
+			for(Platform platform : platforms)
+			{
+				if (stillFalling)
+				{
+					stillFalling = player.gravityEffect(platform);
+				}
+				else
+				{
+					break;
+				}
+			}
 		}
 
 	}
@@ -156,20 +211,86 @@ public class Model {
 	 *
 	 * @see Player#playerPlatCollision(Platform)
 	 */
-	public void checkCollision() {
+	/*public void checkCollision() {
 		player.playerPlatCollision(platform1);
+		checkCollisionEnemy();
+	}*/
+	//for each platform check for collision
+	public void checkCollision() {
+		boolean isBottomCollide = false;
+		for(Platform platform : platforms)
+		{
+			player.playerPlatCollision(platform);
+		}
+		checkCollisionEnemy();
 	}
-
+	
+	//if player collided with the enemy
+	public void checkCollisionEnemy() {
+		for(Enemy enemy : enemies)
+		{
+			if(enemy.isKillable())
+			{
+				if( (player.getBottomSide()).intersects(enemy))
+				{
+					player.setLocation((int)player.getX(), (int)player.getY() - 25);
+					enemy.setIsDead();
+				}
+				continue;
+			}
+			
+			if( (!enemy.isDead()) && enemy.intersects(player) && !(enemy.getHasAttacked()))
+			{
+				enemy.damage(player);
+				enemy.setHasAttacked(true);
+				
+				if(player.getX() <= enemy.getX())
+				{
+					int x = ((int)player.getX()) - 100;
+					int y = (int)player.getY();
+					player.setLocation(x, y);
+				}
+				else if (player.getX() >= enemy.getX())
+				{
+					int x = ((int)player.getX()) + 100;
+					int y = (int)player.getY();
+					player.setLocation(x, y);
+				}
+			}
+			else
+			{
+				enemy.setHasAttacked(false);
+			}
+		}
+	}
+	
 	/**
 	 * Randomly generate a platform
 	 *
 	 */
 	public void createNewPlatform() {
-		int xLoc = (int) ThreadLocalRandom.current().nextInt((int) screenWidth/8, (int) screenWidth - 200);
-		int yLoc = (int) ThreadLocalRandom.current().nextInt((int) screenHeight/10, (int) screenHeight - 400);
-		platform1 = new Platform(xLoc, yLoc, 350, 50);
+		platforms.clear();
+		for(int i = 0; i < 5; i++)
+		{
+			int xLoc = (int) ThreadLocalRandom.current().nextInt((int) screenWidth/8, (int) screenWidth - 200);
+			int yLoc = (int) ThreadLocalRandom.current().nextInt((int) screenHeight/10, (int) screenHeight - 400);
+			platform1 = new Platform(xLoc, yLoc, 350, 50);
+			platforms.add(platform1);
+		}
+			
+		enemies.clear();
+		Random random = new Random(System.currentTimeMillis());
+		for(Platform platform : platforms)
+		{
+			if(random.nextInt(3) == 0)
+			{
+				enemies.add(new EnemyCrab(platform));
+			}
+		}
+		//enemies.add(new EnemyCrab(platform1));
+		enemies.add(new EnemyOsprey((int)screenWidth, (int)screenHeight));
 		
-		Collectible collectible1 = new Collectible((int) ((platform1.getWidth()/2)) , yLoc + 50, 36 , 40, "Foobar");
+		//Collectible collectible1 = new Collectible((int) ((platform1.getWidth()/2)) , yLoc + 50, 36 , 40, "Foobar");
 	}
 
 	/**
@@ -292,6 +413,11 @@ public class Model {
 		return platform1;
 	}
 
+	//return the list of platforms
+	public ArrayList<Platform> getPlatforms() {
+		return platforms;
+	}
+	
 	/**
 	 * Returns a platform's platform object for the game
 	 *
@@ -370,7 +496,17 @@ public class Model {
 	public boolean isPlayerFalling() {
 		return player.getFalling();
 	}
+	
+	//get the list of enemies
+	public ArrayList<Enemy> getEnemies(){
+		return enemies;
+	}
 
+	//get the plater's health
+	public int getPlayerHealth() {
+		return player.getHealth();
+	}
+	
 	// *************************************************
 	// Setters
 

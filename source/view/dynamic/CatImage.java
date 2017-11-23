@@ -38,6 +38,7 @@ public class CatImage extends ImageObject {
 	private BufferedImage[][] pics = new BufferedImage[2][frameCount];
 
 	public CatImage() {
+		super.setName("cat");
 		// load in the images
 		for (int i = 0; i < frameCount; i++) {
 			BufferedImage image = createImage("images/cat/Walk (" + (i + 1) + ")" + ".png");

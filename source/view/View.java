@@ -8,6 +8,7 @@ import java.awt.Toolkit;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.HashMap;
 
 import javax.imageio.ImageIO;
@@ -17,6 +18,10 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 import view.dynamic.CatImage;
 import view.dynamic.BirdImage;
+import view.dynamic.*;
+
+import model.dynamic.*;
+import model.fixed.Platform;
 
 /**
  * Class in charge of drawing the images
@@ -62,8 +67,12 @@ public class View extends JPanel {
 	// ground
 	Rectangle ground;
 	Rectangle platform1;
+	//list of platforms
+	ArrayList<Platform> platforms = new ArrayList<Platform>();
 	String playerCharacter = "cat";
-
+	ArrayList<Enemy> enemies;
+	ArrayList<Heart> hearts = new ArrayList<Heart>(3);
+	int numHearts = 3;
 	// *************************************************
 	// Constructor
 
@@ -77,6 +86,8 @@ public class View extends JPanel {
 	public View() {
 		characterImages.put("cat", catImage);
 		characterImages.put("bird", birdImage);
+		characterImages.put("greenCrab", new CrabImage());
+		characterImages.put("osprey", new OspreyImage());
 
 		// set up background and add view object to the frame
 		try {
@@ -100,6 +111,13 @@ public class View extends JPanel {
 		// make frame visible
 		frame.setVisible(true);
 
+		//make three hearts
+		
+		for(int i = 0; i < 3; i++)
+		{
+			hearts.add(new Heart(i*50,0));
+		}
+		
 	}
 
 	// *************************************************
@@ -113,17 +131,42 @@ public class View extends JPanel {
 	 */
 	@Override
 	public void paint(Graphics g) {
-		g.fillRect(playerX, playerY, imgWidth, imgHeight);
+
 		if (playerCharacter == "cat") {
 			g.drawImage(catImage.show(direct), playerX, playerY, catImage.getWidth(), catImage.getHeight(), this);
 		} else if (playerCharacter == "bird") {
 			g.drawImage(birdImage.show(direct), playerX, playerY, birdImage.getWidth(), birdImage.getHeight(), this);
 		}
-
+		g.setColor(Color.blue);
+		g.fillRect(playerX, playerY, imgWidth, imgHeight);
 		g.setColor(Color.gray);
 		g.fillRect((int) ground.getX(), (int) ground.getY(), (int) ground.getWidth(), (int) ground.getHeight());
-		g.fillRect((int) platform1.getX(), (int) platform1.getY(), (int) platform1.getWidth(),
-				(int) platform1.getHeight());
+		/*g.fillRect((int) platform1.getX(), (int) platform1.getY(), (int) platform1.getWidth(),
+				(int) platform1.getHeight());*/
+		
+		for(Platform platform : platforms)
+		{
+			g.fillRect((int) platform.getX(), (int) platform.getY(), (int) platform.getWidth(),
+					(int) platform.getHeight());
+		}
+		
+		for(Enemy enemy: enemies)
+		{
+			g.setColor(Color.red);
+			g.fillRect((int)enemy.getX(), (int)enemy.getY(), (int)enemy.getWidth(), (int)enemy.getHeight());
+			ImageObject image = characterImages.get(enemy.getName());
+			int direct = enemy.getDirection();
+			g.drawImage(image.show(direct), (int)enemy.getX(), (int)enemy.getY(), (int)enemy.getWidth(), (int)enemy.getHeight(), this);
+			//g.setColor(Color.red);
+			//g.fillRect((int)enemy.getX(), (int)enemy.getY(), (int)enemy.getWidth(), (int)enemy.getHeight());
+		}
+
+		for(int i = 0; i < numHearts; i++)
+		{
+			Heart h = hearts.get(i);
+			g.setColor(Color.red);
+			g.fillOval(h.getX(), h.getY(), h.getImgWeight(), h.getImgHeight());
+		}
 	}
 
 	public void paint2(Graphics g) {
@@ -150,15 +193,21 @@ public class View extends JPanel {
 	 * @param playerCharacter
 	 *            - Player's state (cat/bird)
 	 */
-	public void updateView(int playerX, int playerY, int direct, String playerCharacter) {
+	public void updateView(int playerX, int playerY, int direct, String playerCharacter, int healthLeft) {
 		this.playerX = playerX;
 		this.playerY = playerY;
 		this.direct = direct;
 		this.playerCharacter = playerCharacter;
-
+		numHearts = healthLeft;
+		ImageObject greenCrabImage = characterImages.get("greenCrab");
+		greenCrabImage.nextImage(true);
+		ImageObject ospreyImage = characterImages.get("osprey");
+		ospreyImage.nextImage(true);
 		frame.repaint();
 	}
 
+	
+	
 	// *************************************************
 	// Getters
 
@@ -209,10 +258,14 @@ public class View extends JPanel {
 	 * @param platform1
 	 *            - The platform the player will be interacting with
 	 */
-	public void setPlatformImage(Rectangle platform1) {
+	/*public void setPlatformImage(Rectangle platform1) {
 		this.platform1 = platform1;
-	}
+	}*/
 
+	public void setPlatformImage(ArrayList<Platform> platformList) {
+		this.platforms = platformList;
+	}
+	
 	/**
 	 * After seeing if the character is a bird or cat, it will increment the cat or
 	 * bird image. It will only increment if animate is true
@@ -238,4 +291,7 @@ public class View extends JPanel {
 		animate = b;
 	}
 
+	public void setEnemies(ArrayList<Enemy> e) {
+		enemies = e;
+	}
 }

@@ -9,4 +9,15 @@ import java.awt.image.BufferedImage;
 
 public abstract class ImageObject {
 	
+	private String name;
+	
+	protected void setName(String n) {
+		name = n;
+	}
+	
+	public abstract BufferedImage show(int direct);
+	public abstract int getWidth();
+	public abstract int getHeight();
+	public abstract void nextImage(boolean canAnimate);
+	
 }

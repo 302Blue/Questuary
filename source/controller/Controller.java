@@ -43,17 +43,21 @@ public class Controller {
 		// get the ground from model
 		view.setGroundImage(model.getGround());
 
-		view.setPlatformImage(model.getPlatform());
+		view.setPlatformImage(model.getPlatforms());
 		// update the view of the player's location
-		view.updateView(model.getPlayerX(), model.getPlayerY(), model.getPlayerDirection(), model.getPlayerCharacter());
+		view.updateView(model.getPlayerX(), model.getPlayerY(), model.getPlayerDirection(),
+				model.getPlayerCharacter(), model.getPlayerHealth());
 
+		//give view list of enemies
+		view.setEnemies(model.getEnemies());
+		
 		// set the frame to add on key event listeners
 		frame = view.getFrame();
 
 		// add KeyListeners
 		frame.addKeyListener(new ArrowKeyListener());
 
-		timer = new Timer(45, new UpdateView());
+		timer = new Timer(60, new UpdateView());
 		timer.start();
 
 	}
@@ -89,11 +93,14 @@ public class Controller {
 			model.checkCollision();
 			// increment the player's x and y
 			model.movePlayer();
+			//move the enemies
+			model.moveEnemies();
 			view.setPicNum();
 			// update the view and draw the image
+			view.setPlatformImage(model.getPlatforms());
+			view.setEnemies(model.getEnemies());
 			view.updateView(model.getPlayerX(), model.getPlayerY(), model.getPlayerDirection(),
-					model.getPlayerCharacter());
-			view.setPlatformImage(model.getPlatform());
+					model.getPlayerCharacter(), model.getPlayerHealth());
 		}
 
 	}
@@ -144,6 +151,7 @@ public class Controller {
 							model.makePlayerJump();
 							System.out.println("Executed: makePlayerJump()");
 						}
+						view.setAnimation(true);
 						System.out.println("Up Key Pressed");
 						System.out.println("(" + model.getPlayerX() + "," + model.getPlayerY() + ")"
 								+ model.getPlayerDirectionString());
@@ -160,14 +168,14 @@ public class Controller {
 					case (KeyEvent.VK_RIGHT):
 						// increment the player selector loop
 						model.incrementChangeCharacterCount();
-						view.updateView(model.getPlayerX(), model.getPlayerY(), model.getPlayerDirection(),
-								model.getPlayerCharacter());
+					view.updateView(model.getPlayerX(), model.getPlayerY(), model.getPlayerDirection(),
+							model.getPlayerCharacter(), model.getPlayerHealth());
 						break;
 					case (KeyEvent.VK_LEFT):
 						// increment the player selector loop
 						model.decrementChangeCharacterCount();
-						view.updateView(model.getPlayerX(), model.getPlayerY(), model.getPlayerDirection(),
-								model.getPlayerCharacter());
+					view.updateView(model.getPlayerX(), model.getPlayerY(), model.getPlayerDirection(),
+							model.getPlayerCharacter(), model.getPlayerHealth());
 						break;
 					case (KeyEvent.VK_ESCAPE):
 					case (KeyEvent.VK_Q):

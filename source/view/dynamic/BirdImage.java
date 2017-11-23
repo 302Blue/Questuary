@@ -34,6 +34,7 @@ public class BirdImage extends ImageObject {
 	private BufferedImage[][] pics = new BufferedImage[2][frameCount];
 
 	public BirdImage() {
+		super.setName("bird");
 		// load in the images
 		for (int i = 0; i < frameCount; i++) {
 			BufferedImage image = createImage("images/bird/Fly (" + (i + 1) + ")" + ".png");

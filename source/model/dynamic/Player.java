@@ -16,6 +16,8 @@ public class Player extends DynamicObject {
 	// *************************************************
 	// Fields
 
+	//health of the player
+	private int health = 3;
 	// The state of the player
 	private String state = "Cat";
 
@@ -28,6 +30,12 @@ public class Player extends DynamicObject {
 	private double prevY;
 	private int gravity;
 
+	private int widthOfBumpers = 25;
+	private Rectangle leftSide;
+	private Rectangle rightSide;
+	private Rectangle topSide;
+	private Rectangle bottomSide;
+	
 	// set player to default falling and cannot jump
 	private boolean falling = true;
 	private boolean jumping = false;
@@ -48,7 +56,7 @@ public class Player extends DynamicObject {
 		super.setSize(width, height);
 
 		// set max jumping height
-		maxJumpingHeight = height / 2;
+		maxJumpingHeight = height * 3;
 
 		// set gravity location
 		this.gravity = gravity;
@@ -59,6 +67,12 @@ public class Player extends DynamicObject {
 		// initialize player's dx and dy to 0
 		super.setDx(0);
 		super.setDy(0);
+		
+		//set the sides
+		leftSide = new Rectangle(x, y, widthOfBumpers, height);
+		rightSide = new Rectangle((x + (width - widthOfBumpers)), y, widthOfBumpers, height);
+		topSide = new Rectangle((x + widthOfBumpers), y, (width - 2*widthOfBumpers), widthOfBumpers);
+		bottomSide = new Rectangle((x + widthOfBumpers), (y + (height - widthOfBumpers)), (width - 2*widthOfBumpers), widthOfBumpers);
 	}
 
 	// *************************************************
@@ -67,11 +81,13 @@ public class Player extends DynamicObject {
 	// determines if touching the ground with appropriate actions for jumping and
 	// falling
 	public boolean gravityEffect(Rectangle ground) {
-		Rectangle r = new Rectangle((int) ground.getX(), (int) ground.getY(), (int) (ground.getWidth() * .75),
-				(int) ground.getHeight());
+		/*Rectangle r = new Rectangle((int) ground.getX(), (int) ground.getY(), (int) (ground.getWidth() * .75),
+				(int) ground.getHeight());*/
 		// determine if the player is falling
-		falling = !(this.intersects(r));
+		//falling = !(this.intersects(ground));
 
+		falling = !(bottomSide.intersects(ground));
+		
 		// if player is not touching the ground and is not jumping then the player is
 		// falling
 		if (falling && !jumping) {
@@ -128,9 +144,12 @@ public class Player extends DynamicObject {
 
 	// collision between player and platforms
 	public void playerPlatCollision(Platform plat) {
+		
+		
 		if (this.intersects(plat.getLeft()) && this.getDirection() == 1) {
 			this.setDx(0);
-		} else if (this.intersects(plat.getRight()) && this.getDirection() == 0) {
+		} 
+		else if (this.intersects(plat.getRight()) && this.getDirection() == 0) {
 			this.setDx(0);
 		}
 		/*
@@ -138,6 +157,17 @@ public class Player extends DynamicObject {
 		 * this.setDx(20); } else if (!this.intersects(plat.getRight()) &&
 		 * this.getDirection() == 0) { this.setDx(-20); }
 		 */
+	}
+	
+	public void move() {
+		int x = (int)super.getX() + super.getDx();
+		int y = (int)super.getY() + super.getDy();
+		super.setLocation(x, y);
+		
+		leftSide.setLocation(x, y);
+		rightSide.setLocation((x + (width - widthOfBumpers)), y);
+		topSide.setLocation((x + widthOfBumpers), y);
+		bottomSide.setLocation((x + widthOfBumpers), (y + (height - widthOfBumpers)));
 	}
 	
 	public void incrementScore() {
@@ -173,6 +203,24 @@ public class Player extends DynamicObject {
 			return "bird";
 		}
 	}
+	
+	//getter for health
+	public int getHealth() {
+		return health;
+	}
+	
+	public Rectangle getLeftSide() {
+		return leftSide;
+	}
+	public Rectangle getRightSide() {
+		return rightSide;
+	}
+	public Rectangle getTopSide() {
+		return topSide;
+	}
+	public Rectangle getBottomSide() {
+		return bottomSide;
+	}
 
 	// *************************************************
 	// Setters
@@ -206,4 +254,8 @@ public class Player extends DynamicObject {
 		maxJumpingHeight = j;
 	}
 
+	//setter for health
+	public void setHealth(int i) {
+		health = i;
+	}
 }
