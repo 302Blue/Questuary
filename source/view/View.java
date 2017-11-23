@@ -188,7 +188,37 @@ public class View extends JPanel {
 				g.drawImage(ChangeCharacterBird, (int)screenWidth/2 - ChangeCharacterMenuWidth/2, (int)screenHeight/2 -ChangeCharacterMenuHeight/2, ChangeCharacterMenuWidth, ChangeCharacterMenuHeight, this);
 			}
 		}
+		g.setColor(Color.blue);
+		g.fillRect(playerX, playerY, imgWidth, imgHeight);
+		g.setColor(Color.gray);
+		g.fillRect((int) ground.getX(), (int) ground.getY(), (int) ground.getWidth(), (int) ground.getHeight());
+		/*g.fillRect((int) platform1.getX(), (int) platform1.getY(), (int) platform1.getWidth(),
+				(int) platform1.getHeight());*/
 		
+		for(Platform platform : platforms)
+		{
+			g.fillRect((int) platform.getX(), (int) platform.getY(), (int) platform.getWidth(),
+					(int) platform.getHeight());
+		}
+		
+		for(Enemy enemy: enemies)
+		{
+			g.setColor(Color.red);
+			g.fillRect((int)enemy.getX(), (int)enemy.getY(), (int)enemy.getWidth(), (int)enemy.getHeight());
+			ImageObject image = characterImages.get(enemy.getName());
+			int direct = enemy.getDirection();
+			g.drawImage(image.show(direct), (int)enemy.getX(), (int)enemy.getY(), (int)enemy.getWidth(), (int)enemy.getHeight(), this);
+			//g.setColor(Color.red);
+			//g.fillRect((int)enemy.getX(), (int)enemy.getY(), (int)enemy.getWidth(), (int)enemy.getHeight());
+		}
+
+		for(int i = 0; i < numHearts; i++)
+		{
+			Heart h = hearts.get(i);
+			g.setColor(Color.red);
+			g.fillOval(h.getX(), h.getY(), h.getImgWeight(), h.getImgHeight());
+			
+		}
 	}
 	
 	
