@@ -80,19 +80,11 @@ public class Player extends DynamicObject {
 
 	// determines if touching the ground with appropriate actions for jumping and
 	// falling
-	public boolean gravityEffect(Rectangle ground) {
-		/*Rectangle r = new Rectangle((int) ground.getX(), (int) ground.getY(), (int) (ground.getWidth() * .75),
-				(int) ground.getHeight());*/
-		// determine if the player is falling
-		//falling = !(this.intersects(ground));
+	public void gravityEffect(Rectangle ground) {
 
-		falling = !(bottomSide.intersects(ground));
-		
-		// if player is not touching the ground and is not jumping then the player is
-		// falling
 		if (falling && !jumping) {
 			playerFalling();
-			return true;
+			
 		}
 		// if player is not touching the ground but is jumping then allow player to jump
 		else if (falling && jumping) {
@@ -105,7 +97,7 @@ public class Player extends DynamicObject {
 				// if max height reached then player stops jumping/ascending
 				jumping = false;
 			}
-			return true;
+			
 		}
 		// if player is touching the ground but is not jumping then allow player to jump
 		else if (!falling && jumping) {
@@ -115,12 +107,12 @@ public class Player extends DynamicObject {
 			} else {
 				jumping = false;
 			}
-			return false;
+			
 		}
 		// if player is on a surface then set dy to 0
 		else {
 			super.setDy(0);
-			return false;
+			
 		}
 	}
 
@@ -222,6 +214,9 @@ public class Player extends DynamicObject {
 		return bottomSide;
 	}
 
+	public boolean isAbleToAttack() {
+		return (falling && !jumping);
+	}
 	// *************************************************
 	// Setters
 
@@ -244,9 +239,13 @@ public class Player extends DynamicObject {
 	}
 
 	// setter for jumping
-	public void setJumping() {
-		jumping = true;
+	public void setJumping(boolean b) {
+		jumping = b;
 		prevY = super.getY();
+	}
+	// setter for falling
+	public void setFalling(boolean b) {
+		falling = b;
 	}
 
 	// setter for maxJumpingHeight

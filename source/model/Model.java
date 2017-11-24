@@ -2,6 +2,7 @@ package model;
 
 import java.awt.Rectangle;
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.Random;
 import java.util.concurrent.ThreadLocalRandom;
 
@@ -109,15 +110,14 @@ public class Model {
 	}
 	
 	public void moveEnemies() {
-		for(Enemy enemy : enemies)
+		Iterator<Enemy> enemyIter = enemies.iterator();
+		while(enemyIter.hasNext())
 		{
-			if(enemy.getY() > screenHeight)
+			Enemy enemy = enemyIter.next();
+			enemy.move();
+			if(enemy.isDead() && (enemy.getY() > screenHeight))
 			{
-				enemies.remove(enemy);
-			}
-			else
-			{
-				enemy.move();
+				enemyIter.remove();
 			}
 		}
 	}
@@ -174,23 +174,7 @@ public class Model {
 	 * @see Player#gravityEffect(Rectangle)
 	 */
 	public void gravity() {
-		boolean stillFalling;
-		stillFalling = player.gravityEffect(ground);
-		if (stillFalling) {
-			//player.gravityEffect(platform1);
-			for(Platform platform : platforms)
-			{
-				if (stillFalling)
-				{
-					stillFalling = player.gravityEffect(platform);
-				}
-				else
-				{
-					break;
-				}
-			}
-		}
-
+		player.gravityEffect(ground);
 	}
 
 	/**
@@ -206,23 +190,41 @@ public class Model {
 		}
 	}
 
-	/**
-	 * Checks player's collision with platform1
-	 *
-	 * @see Player#playerPlatCollision(Platform)
-	 */
-	/*public void checkCollision() {
-		player.playerPlatCollision(platform1);
-		checkCollisionEnemy();
-	}*/
-	//for each platform check for collision
+	//check each platform and enemy for collision
 	public void checkCollision() {
+		checkCollisionPlatform();
+		checkCollisionEnemy();
+	}
+	
+	public void checkCollisionPlatform() {
 		boolean isBottomCollide = false;
+		platforms.add(ground);
 		for(Platform platform : platforms)
 		{
-			player.playerPlatCollision(platform);
+			if((player.getBottomSide()).intersects(platform))
+			{
+				player.setFalling(false);
+				isBottomCollide = true;
+			}
+			else if((player.getTopSide()).intersects(platform))
+			{
+				player.setJumping(false);
+			}
+			else if(((player.getLeftSide()).intersects(platform)) && player.getDirection() == 0)
+			{
+				player.setDx(0);
+			}
+			else if(((player.getRightSide()).intersects(platform)) && player.getDirection() == 1)
+			{
+				player.setDx(0);
+			}
 		}
-		checkCollisionEnemy();
+		
+		if(!isBottomCollide)
+		{
+			player.setFalling(true);
+		}
+		platforms.remove(ground);
 	}
 	
 	//if player collided with the enemy
@@ -231,12 +233,12 @@ public class Model {
 		{
 			if(enemy.isKillable())
 			{
-				if( (player.getBottomSide()).intersects(enemy))
+				if( (player.getBottomSide()).intersects(enemy) && player.isAbleToAttack())
 				{
 					player.setLocation((int)player.getX(), (int)player.getY() - 25);
 					enemy.setIsDead();
+					//continue;
 				}
-				continue;
 			}
 			
 			if( (!enemy.isDead()) && enemy.intersects(player) && !(enemy.getHasAttacked()))
@@ -244,24 +246,46 @@ public class Model {
 				enemy.damage(player);
 				enemy.setHasAttacked(true);
 				
-				if(player.getX() <= enemy.getX())
+				if(!(this.horizontalCollision(enemy)))
 				{
-					int x = ((int)player.getX()) - 100;
-					int y = (int)player.getY();
-					player.setLocation(x, y);
-				}
-				else if (player.getX() >= enemy.getX())
-				{
-					int x = ((int)player.getX()) + 100;
-					int y = (int)player.getY();
-					player.setLocation(x, y);
+					//if enemy hit left side of player
+					if(enemy.intersects(player.getLeftSide()))
+					{
+						int x = ((int)player.getX()) + 100;
+						int y = (int)player.getY();
+						player.setLocation(x, y);
+					}
+					//if enemy hit right side of player
+					else if (enemy.intersects(player.getRightSide()))
+					{
+						int x = ((int)player.getX()) - 100;
+						int y = (int)player.getY();
+						player.setLocation(x, y);
+					}
 				}
 			}
-			else
+			else if (!enemy.intersects(player))
 			{
 				enemy.setHasAttacked(false);
 			}
 		}
+	}
+	
+	private boolean horizontalCollision(Enemy enemy) {
+		for(Platform platform : platforms)
+		{
+			//if player hit left side of platform and enemy is facing right
+			if( (platform.getLeft()).intersects(player) && enemy.getDirection() == 1)
+			{
+				return true;
+			}
+			//if player hit right side of platform and enemy is facing left
+			else if( (platform.getRight()).intersects(player) && (enemy.getDirection() == 0))
+			{
+				return true;
+			}
+		}
+		return false;
 	}
 	
 	/**
@@ -400,6 +424,15 @@ public class Model {
 	 *
 	 * @return Rectangle - Ground's Rectangle object
 	 */
+	
+	public int getPlayerDx() {
+		return player.getDx();
+	}
+	
+	public int getPlayerDy() {
+		return player.getDy();
+	}
+	
 	public Rectangle getGround() {
 		return ground;
 	}
@@ -533,7 +566,7 @@ public class Model {
 	 * @see Player#setJumping()
 	 */
 	public void makePlayerJump() {
-		player.setJumping();
+		player.setJumping(true);
 	}
 
 	/**

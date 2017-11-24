@@ -57,7 +57,7 @@ public class Controller {
 		// add KeyListeners
 		frame.addKeyListener(new ArrowKeyListener());
 
-		timer = new Timer(60, new UpdateView());
+		timer = new Timer(45, new UpdateView());
 		timer.start();
 
 	}
@@ -89,8 +89,8 @@ public class Controller {
 		public void actionPerformed(ActionEvent arg0) {
 			// test the player on falling and jumping
 			model.changeRoom();
-			model.gravity();
 			model.checkCollision();
+			model.gravity();
 			// increment the player's x and y
 			model.movePlayer();
 			//move the enemies
@@ -99,6 +99,14 @@ public class Controller {
 			// update the view and draw the image
 			view.setPlatformImage(model.getPlatforms());
 			view.setEnemies(model.getEnemies());
+			if(model.getPlayerDy() != 0)
+			{
+				view.setAnimation(true);
+			}
+			else
+			{
+				view.setAnimation(false);
+			}
 			view.updateView(model.getPlayerX(), model.getPlayerY(), model.getPlayerDirection(),
 					model.getPlayerCharacter(), model.getPlayerHealth());
 		}
@@ -151,7 +159,6 @@ public class Controller {
 							model.makePlayerJump();
 							System.out.println("Executed: makePlayerJump()");
 						}
-						view.setAnimation(true);
 						System.out.println("Up Key Pressed");
 						System.out.println("(" + model.getPlayerX() + "," + model.getPlayerY() + ")"
 								+ model.getPlayerDirectionString());
@@ -183,6 +190,7 @@ public class Controller {
 						System.exit(0);
 						break;
 					}
+				
 				}
 
 			} // if more then 1 key is pressed

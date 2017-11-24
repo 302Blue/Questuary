@@ -29,12 +29,12 @@ public class EnemyCrab extends Enemy {
 		Random random = new Random(System.nanoTime());
 		if(random.nextBoolean())
 		{
-			super.setLocation((int)platform.getX(), (int)platform.getY() - 20);
+			super.setLocation((int)platform.getX(), (int)(platform.getY() - height + 5));
 			super.setDirection(0);
 		}
 		else
 		{
-			super.setLocation((int)(platform.getX() + platform.getWidth()), (int)platform.getY() - 20);
+			super.setLocation((int)(platform.getX() + platform.getWidth()), (int)(platform.getY() - height + 5));
 			super.setDirection(1);
 		}
 		
