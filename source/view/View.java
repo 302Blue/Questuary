@@ -96,8 +96,15 @@ public class View extends JPanel {
 	// change character menu
 	Image ChangeCharacterResearcher;
 	Image ChangeCharacterBird;
+	Image GameOverScreen;
 	final private int ChangeCharacterMenuHeight = 500;
 	final private int ChangeCharacterMenuWidth = 700;
+	final private int GameOverScreenHeight = (int)screenHeight - 100;
+	final private int GameOverScreenWidth = (int) screenWidth- 100;
+	final private int GameOverScreenXPos = 50;
+	final private int GameOverScreenYPos = 25;
+	public String highScore = "";
+	public String score = "";
 
 	// *************************************************
 	// Constructor
@@ -252,8 +259,22 @@ public class View extends JPanel {
 		// if game is done
 		} else if (gameOverMode) {
 			// g.drawImage(researcherImage.show(direct), 500, 500, 700, 700, this);
-			g.setFont(new Font("TimesRoman", Font.PLAIN,100));
-			g.drawString("Game Over", 500, 500);
+			//g.setFont(new Font("TimesRoman", Font.PLAIN,100));
+			//g.drawString("Game Over", 500, 500);
+			try {
+				GameOverScreen = ImageIO
+						.read(new File("images/Game Over/GameOver.png"));
+			} catch (IOException e) {
+				System.out.println("Error with file upload");
+				e.printStackTrace();
+			}
+			
+			g.drawImage(GameOverScreen, GameOverScreenXPos,GameOverScreenYPos, GameOverScreenWidth,GameOverScreenHeight, this);
+			
+			g.setFont(new Font("Comic Sans MS", Font.PLAIN,85));
+			g.drawString(highScore, 625, 440);
+			g.drawString(score, 625, 310);
+			
 		}
 		
 		/*// old paint hearts function
@@ -351,6 +372,26 @@ public class View extends JPanel {
 
 	// *************************************************
 	// Setters
+	
+	/**
+	 * Sets the game High Score
+	 * 
+	 * @param highScore
+	 *            - Sets the highScore to String highScore
+	 */
+	public void setHighScore(String highScore) {
+		this.highScore = highScore;
+	}
+	
+	/**
+	 * Sets the players current Score
+	 * 
+	 * @param score
+	 *            - Sets the score to String score
+	 */
+	public void setScore(String score) {
+		this.score = score;
+	}
 
 	/**
 	 * Sets the View.ground to the ground passed in, to be drawn in another method

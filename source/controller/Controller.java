@@ -125,7 +125,11 @@ public class Controller {
 					model.setName(name);
 					model.updateHighScore();
 				}
+				
+				view.setHighScore(model.getHighScore());
+				view.setScore(model.getScore());
 				view.gameOverMode();
+				
 			}
 		}
 
@@ -152,7 +156,16 @@ public class Controller {
 			}
 			if (model.getIsGameOver()) {
 				// controls for game over state
-				view.gameOverMode();
+				//view.setHighScore(model.getHighScore());
+				//view.setScore(model.getScore());
+				//view.gameOverMode();
+				if (keys.contains(KeyEvent.VK_DOWN) && keys.contains(KeyEvent.VK_RIGHT)) {
+					// something is selected from game over screen
+					//System.e
+					frame.dispose();
+					String args[] = {};
+					main(args);
+				}
 			}
 
 			// if only 1 key is pressed
@@ -191,6 +204,10 @@ public class Controller {
 						// if q is press then quit
 						System.exit(0);
 						break;
+					case (KeyEvent.VK_C):
+						model.setIsGameOver(true);
+						view.gameOverMode();
+						break;
 					}
 				} else if (model.getChangeCharacterMode() && !model.getIsGameOver()) {
 					// game is in change player mode
@@ -216,7 +233,7 @@ public class Controller {
 
 				} else if (model.getIsGameOver()) {
 					// controls for game over state
-					view.gameOverMode();
+					//view.gameOverMode();
 					
 				}
 
@@ -242,14 +259,7 @@ public class Controller {
 					System.out.println("Executed: makePlayerJump()");
 				}
 
-			} else if (model.getIsGameOver()) {
-				view.gameOverMode();
-				
-				//view.gameOverMode();
-				if (keys.contains(KeyEvent.VK_DOWN) && keys.contains(KeyEvent.VK_RIGHT)) {
-					// something is selected from game over screen
-				}
-			}
+			} 
 
 		}
 

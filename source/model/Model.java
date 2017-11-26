@@ -718,9 +718,8 @@ public class Model {
 	/**
 	 * Getter for the High Score
 	 * 
-	 * @return boolean - The value for whether or not the player is currently
-	 *         falling
-	 * @see Player#getFalling()
+	 * @return String - high score data 
+	 * 	from highscore file
 	 */
 	public String getHighScore() {
 
@@ -747,6 +746,17 @@ public class Model {
 				e.printStackTrace();
 			}
 		}
+	}
+	
+	/**
+	 * Getter for the High Score
+	 * 
+	 * @return String - Current player 
+	 * 	score converted to a string 
+	 */
+	public String getScore() {
+
+		return Integer.toString(player.getScore());
 	}
 
 	// *************************************************
