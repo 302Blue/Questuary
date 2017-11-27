@@ -12,6 +12,7 @@ import javax.swing.JFrame;
 import javax.swing.Timer;
 
 import view.View;
+import view.fixed.QuestionsFrame;
 import model.Model;
 
 /**
@@ -106,6 +107,10 @@ public class Controller {
 			// move the enemies
 			model.moveEnemies();
 			model.checkIsGameOver();
+			
+			if(model.getIsQuestionMode() && !model.getIsGameOver()) {
+				new QuestionsFrame(model.getQuestion());
+			}
 			view.setPicNum();
 			// update the view and draw the image
 			view.setPlatformImage(model.getPlatforms());
@@ -227,7 +232,15 @@ public class Controller {
 
 				} else if (model.getIsGameOver()) {
 					// controls for game over state					
+				}else if (model.getIsQuestionMode() && !model.getIsGameOver()) {
+					switch (keys.get(0)) {
+					case (KeyEvent.VK_DOWN):
+						QuestionsFrame.down();
+					case (KeyEvent.VK_UP):
+						QuestionsFrame.up();
+					}
 				}
+				
 
 			} // if more then 1 key is pressed
 			else if (keys.contains(KeyEvent.VK_DOWN) && keys.contains(KeyEvent.VK_RIGHT)) {
