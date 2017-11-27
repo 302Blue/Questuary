@@ -12,6 +12,7 @@ import model.fixed.Question;
 public class QuestionsFrame {
 	
 	JFrame f;
+	String[] answers;
 	private static ArrayList<JRadioButton> options = new ArrayList<JRadioButton>();
 	private static ListIterator<JRadioButton> iter;
 	private static boolean upFlag;
@@ -19,12 +20,12 @@ public class QuestionsFrame {
 
 	public QuestionsFrame(Question question) {
 		
-		String[] answers = question.getAnswers();
+		answers = question.getAnswers();
 		JFrame f = new JFrame(question.getQuestion());
 		//f.add(new TextField(question));
 		//f.setTitle(question);
 		//JLabel l = new JLabel(question);
-		Label question2 = new Label("Question: " + question);
+		//Label question2 = new Label("Question: " + question);
 		
 		JRadioButton a = new JRadioButton("A) " + answers[0]);
 		JRadioButton b = new JRadioButton("B) " + answers[1]);
@@ -45,7 +46,7 @@ public class QuestionsFrame {
 		f.add(b);
 		f.add(c);
 		f.add(d);
-		f.add(question2);
+		//f.add(question2);
 		f.setSize(600, 300);
 		f.setLayout(null);
 		f.setVisible(true);

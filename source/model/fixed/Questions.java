@@ -22,7 +22,8 @@ public class Questions {
 
 	public Question pickQuestion(int numCollectible) {
 		int questionIndex = numCollectible / 3;
-		return questions.get(questionIndex);
+		return questions.get(0);        //TODO: when there are more questions questionIndex is passed into questions.get(questionIndex)
+		//TODO: this method will not work
 	}
 
 }

@@ -29,6 +29,7 @@ public class Controller {
 	JFrame frame;
 	Timer timer;
 	ArrayList<Integer> keys = new ArrayList<Integer>();
+	private boolean questionModeFlag = true;
 
 	// *************************************************
 	// Constructor
@@ -106,6 +107,7 @@ public class Controller {
 			// move the enemies
 			model.moveEnemies();
 			model.checkIsGameOver();
+			
 			view.setPicNum();
 			
 			// update the view and draw the image
@@ -113,30 +115,36 @@ public class Controller {
 			view.setEnemies(model.getEnemies());
 			view.setCollectibles(model.getCollectibles());
 
-			if (model.getIsQuestionMode() && !model.getIsGameOver()) {
+			if (questionModeFlag && model.getIsQuestionMode() && model.getIsGamePaused()) {
+				questionModeFlag = false;
 				new QuestionsFrame(model.getQuestion());
 			}
-
-			if (model.getPlayerDx() != 0 || model.getPlayerDy() != 0) {
-				view.setAnimation(true);
-			} else {
-				view.setAnimation(false);
-			}
-			view.updateView(model.getPlayerX(), model.getPlayerY(), model.getPlayerDirection(),
-					model.getPlayerCharacter(), model.getPlayerHealth());
-			if (model.getIsGameOver()) {
-				// controls for game over state
-				if (model.isNewHighScore()) {
-					String name = view.getName();
-					model.setName(name);
-					model.updateHighScore();
+			else {
+				
+				if (model.getPlayerDx() != 0 || model.getPlayerDy() != 0) {
+					view.setAnimation(true);
+				} else {
+					view.setAnimation(false);
 				}
+				view.updateView(model.getPlayerX(), model.getPlayerY(), model.getPlayerDirection(),
+						model.getPlayerCharacter(), model.getPlayerHealth());
+				if (model.getIsGameOver()) {
+					// controls for game over state
+					if (model.isNewHighScore()) {
+						String name = view.getName();
+						model.setName(name);
+						model.updateHighScore();
+					}
 
-				view.setHighScore(model.getHighScore());
-				view.setScore(model.getScore());
-				view.gameOverMode();
+					view.setHighScore(model.getHighScore());
+					view.setScore(model.getScore());
+					view.gameOverMode();
 
+				}
+				
 			}
+
+			
 		}
 
 	}
@@ -232,11 +240,17 @@ public class Controller {
 					}
 
 				} else if (model.getIsQuestionMode() && !model.getIsGameOver()) {
+					int counter = 0;       // counter to know which option was chosen
 					switch (keys.get(0)) {
 					case (KeyEvent.VK_DOWN):
+						counter++;
 						QuestionsFrame.down();
 					case (KeyEvent.VK_UP):
+						counter--;
 						QuestionsFrame.up();
+					case (KeyEvent.VK_RIGHT):
+						//TODO: implement answer result
+						model.getQuestion().checkAnswer(counter);
 					}
 				} else if (model.getIsGameOver()) {
 					// controls for game over state
