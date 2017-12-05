@@ -315,38 +315,6 @@ public class IntroView extends JPanel {
 						ChangeCharacterMenuHeight, this);
 			}
 		}
-		
-		/*int stringX = (int)(screenWidth * 0.1);
-		int stringY = (int)(screenHeight * 0.25);
-		
-		// display stuff here for separate rooms
-		switch (introRoomNum) {
-			case 0:
-				g.setColor(Color.cyan);
-				g.setFont(new Font("Garamond", Font.BOLD, 50));
-				g.drawString("Use LEFT & RIGHT ARROW KEY to move, UP KEY to jump", stringX, stringY);
-			break;
-			case 1: 
-				g.setColor(Color.CYAN);
-				g.setFont(new Font("Garamond", Font.BOLD, 50));
-				g.drawString("Press DOWN AND RIGHT to change characters", stringX, stringY);
-				g.drawString("Use the BIRD character to JUMP HIGHER", stringX + 50, stringY + 50);
-			break;
-			case 2: 
-				g.setColor(Color.CYAN);
-				g.setFont(new Font("Garamond", Font.BOLD, 50));
-				g.drawString("Collect HORSESHOE CRABS to see a FACT and INCREASE your SCORE", stringX, stringY);
-				g.drawString("After 3 COLLECTIBLES, go to the CHEST to ANSWER A QUESTION", stringX + 50, stringY + 50);
-			break;
-			case 3: 
-				g.setColor(Color.CYAN);
-				g.setFont(new Font("Garamond", Font.BOLD, 50));
-				g.drawString("WATCH OUT for the OSPREY", stringX, stringY);
-				g.drawString("JUMP on the GREEN EUROPEAN CRAB, but DON'T GET TOUCHED", stringX + 50, stringY + 50);
-				g.drawString("START GAME ->", (int)(screenWidth * 0.7), (int)(screenHeight * 0.8));
-			break;
-			
-		}*/
 	}
 
 	/**
