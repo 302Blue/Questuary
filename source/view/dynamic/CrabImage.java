@@ -1,6 +1,5 @@
 package view.dynamic;
 
-import java.awt.Toolkit;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;

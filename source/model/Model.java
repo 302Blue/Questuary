@@ -1,23 +1,5 @@
 package model;
 
-import java.awt.Rectangle;
-import java.util.ArrayList;
-import java.util.Iterator;
-import java.util.Random;
-import java.util.concurrent.ThreadLocalRandom;
-
-import model.dynamic.Player;
-import model.dynamic.Enemy;
-import model.dynamic.EnemyCrab;
-import model.dynamic.EnemyOsprey;
-import model.fixed.Chest;
-import model.fixed.Collectible;
-import model.fixed.Fact;
-import model.fixed.Ground;
-import model.fixed.Platform;
-import model.fixed.Question;
-import model.fixed.QuestionBank;
-
 import java.awt.Toolkit;
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
@@ -26,6 +8,22 @@ import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.Iterator;
+import java.util.Random;
+import java.util.concurrent.ThreadLocalRandom;
+
+import model.dynamic.Enemy;
+import model.dynamic.EnemyCrab;
+import model.dynamic.EnemyOsprey;
+import model.dynamic.Player;
+import model.fixed.Chest;
+import model.fixed.Collectible;
+import model.fixed.Fact;
+import model.fixed.Ground;
+import model.fixed.Platform;
+import model.fixed.Question;
+import model.fixed.QuestionBank;
 
 /**
  * @author Andrew Baldwin, Matt Billone, David Chan, Akash Sharma, Vineeth Gutta
@@ -56,6 +54,10 @@ public class Model {
 	private Platform p5;
 	// offset for ground
 	int groundOffSet = 100;
+	
+	// width of a platform
+	double platWidth = (screenWidth/6);
+	double platHeight = (screenHeight/16);
 	// array list containing the platform objects
 	private ArrayList<Platform> platforms = new ArrayList<Platform>();
 	// fields for all other world objects
@@ -75,6 +77,9 @@ public class Model {
 	private boolean isQuestionMode = false;
 	private boolean isGamePaused = false;
 	private boolean isGameOver = false;
+	// intro Mode fields
+	private boolean isIntroMode;
+	int introRoomNum = 0;
 	// character number
 	private int changeCharacterCount = 0;
 	// starting positions
@@ -85,9 +90,7 @@ public class Model {
 	private String name = "";
 	private int gameTimeLeft;
 
-	// Intro Mode fields
-	private boolean isIntroMode;
-	int introRoomNum = 0;
+	
 
 	// add Question variables and QuestionMode flag
 	private boolean questionMode = false;
@@ -125,31 +128,31 @@ public class Model {
 				p1 = new Platform(
 						(int) ThreadLocalRandom.current().nextInt((int) (screenWidth / 4), (int) (screenWidth / 3)),
 						(int) ThreadLocalRandom.current().nextInt((int) (screenHeight / 2), (int) (screenHeight / 1.5)),
-						350, 50);
+						(int) platWidth, (int) platHeight);
 				platforms.add(p1);
 			} else if (i == 1) {
-				p2 = new Platform((int) (p1.getX() + ThreadLocalRandom.current().nextInt(350, (int) (screenWidth / 4))),
+				p2 = new Platform((int) (p1.getX() + ThreadLocalRandom.current().nextInt((int)platWidth, (int) (screenWidth / 4))),
 						(int) (p1.getY() + ThreadLocalRandom.current().nextInt(0, (int) (screenHeight / 5))
 								- ThreadLocalRandom.current().nextInt(0, (int) (screenHeight / 5))),
-						350, 50);
+						(int) platWidth, (int) platHeight);
 				platforms.add(p2);
 			} else if (i == 2) {
-				p3 = new Platform((int) (p2.getX() + ThreadLocalRandom.current().nextInt(350, (int) (screenWidth / 4))),
+				p3 = new Platform((int) (p2.getX() + ThreadLocalRandom.current().nextInt((int) platWidth, (int) (screenWidth / 4))),
 						(int) (p2.getY() + ThreadLocalRandom.current().nextInt(0, (int) (screenHeight / 5))
 								- ThreadLocalRandom.current().nextInt(0, (int) (screenHeight / 5))),
-						350, 50);
+						(int) platWidth, (int) platHeight);
 				platforms.add(p3);
 			} else if (i == 3) {
-				p4 = new Platform((int) (p3.getX() + ThreadLocalRandom.current().nextInt(350, (int) (screenWidth / 4))),
+				p4 = new Platform((int) (p3.getX() + ThreadLocalRandom.current().nextInt((int) platWidth, (int) (screenWidth / 4))),
 						(int) (p3.getY() + ThreadLocalRandom.current().nextInt(0, (int) (screenHeight / 5))
 								- ThreadLocalRandom.current().nextInt(0, (int) (screenHeight / 5))),
-						350, 50);
+						(int) platWidth, (int) platHeight);
 				platforms.add(p4);
 			} else if (i == 4) {
-				p5 = new Platform((int) (p4.getX() + ThreadLocalRandom.current().nextInt(350, (int) (screenWidth / 4))),
+				p5 = new Platform((int) (p4.getX() + ThreadLocalRandom.current().nextInt((int) platWidth, (int) (screenWidth / 4))),
 						(int) (p4.getCenterY() + ThreadLocalRandom.current().nextInt(0, (int) (screenHeight / 5))
 								- ThreadLocalRandom.current().nextInt(0, (int) (screenHeight / 5))),
-						350, 50);
+						(int) platWidth, (int) platHeight);
 				platforms.add(p5);
 			}
 		}
@@ -374,10 +377,15 @@ public class Model {
 		for (Iterator<Collectible> collectIter = collectibles.iterator(); collectIter.hasNext();) {
 			Collectible c = collectIter.next();
 			if (player.intersects(c)) {
-				// ensure that no more than one fact is displayed at a time
-				facts.clear();
-				// generate new fact object
-				facts.add(new Fact());
+				if (isIntroMode) {
+					// intro fact
+					facts.clear();
+				} else {
+					// ensure that no more than one fact is displayed at a time
+					facts.clear();
+					// generate new fact object
+					facts.add(new Fact());
+				}
 				// add collectible to collected
 				collected.add(new Collectible(numCollected));
 				// increment number collected and score
@@ -434,16 +442,16 @@ public class Model {
 				createNewPlatform();
 			}else {
 				switch (introRoomNum) {
-				case 1: setPlatform(500,700); // use this method to place custom platforms for intro
+				case 1: setPlatform((int)(screenWidth/3),(int)(screenHeight/2)); // use this method to place custom platforms for intro
 				break;
 				case 2: 
-					setPlatform(400,800); 
+					setPlatform((int)(screenWidth/3),(int)(screenHeight/1.5)); 
 					collectibles.add(new Collectible(platforms.get(0)));
-					setPlatform(800,800); 
+					setPlatform((int)(screenWidth/2),(int)(screenHeight/1.5)); 
 					chests.add(new Chest(platforms.get(1)));
 				break;
 				case 3:
-					setPlatform(400,800); 
+					setPlatform((int)(screenWidth/3),(int)(screenHeight/1.5)); 
 					enemies.add(new EnemyCrab(platforms.get(0)));
 					enemies.add(new EnemyOsprey((int) screenWidth, (int) screenHeight));
 				break;
@@ -481,32 +489,36 @@ public class Model {
 
 		for (int i = 0; i < 5; i++) {
 			if (i == 0) {
-				p1 = new Platform((int) ThreadLocalRandom.current().nextInt(300, 400),
-						(int) ThreadLocalRandom.current().nextInt(765, 900), 350, 50);
+				p1 = new Platform(
+						(int) ThreadLocalRandom.current().nextInt((int) (screenWidth / 4), (int) (screenWidth / 3)),
+						(int) ThreadLocalRandom.current().nextInt((int) (screenHeight / 2), (int) (screenHeight / 1.5)),
+						(int) platWidth, (int) platHeight);
 				platforms.add(p1);
 			} else if (i == 1) {
-				p2 = new Platform((int) (p1.getX() + ThreadLocalRandom.current().nextInt(350, 500)), (int) (p1.getY()
-						+ ThreadLocalRandom.current().nextInt(0, 300) - ThreadLocalRandom.current().nextInt(0, 300)),
-						350, 50);
+				p2 = new Platform((int) (p1.getX() + ThreadLocalRandom.current().nextInt((int)platWidth, (int) (screenWidth / 4))),
+						(int) (p1.getY() + ThreadLocalRandom.current().nextInt(0, (int) (screenHeight / 5))
+								- ThreadLocalRandom.current().nextInt(0, (int) (screenHeight / 5))),
+						(int) platWidth, (int) platHeight);
 				platforms.add(p2);
 			} else if (i == 2) {
-				p3 = new Platform((int) (p2.getX() + ThreadLocalRandom.current().nextInt(350, 500)), (int) (p2.getY()
-						+ ThreadLocalRandom.current().nextInt(0, 300) - ThreadLocalRandom.current().nextInt(0, 300)),
-						350, 50);
+				p3 = new Platform((int) (p2.getX() + ThreadLocalRandom.current().nextInt((int) platWidth, (int) (screenWidth / 4))),
+						(int) (p2.getY() + ThreadLocalRandom.current().nextInt(0, (int) (screenHeight / 5))
+								- ThreadLocalRandom.current().nextInt(0, (int) (screenHeight / 5))),
+						(int)platWidth, (int) platHeight);
 				platforms.add(p3);
 			} else if (i == 3) {
-				p4 = new Platform((int) (p3.getX() + ThreadLocalRandom.current().nextInt(350, 500)), (int) (p3.getY()
-						+ ThreadLocalRandom.current().nextInt(0, 300) - ThreadLocalRandom.current().nextInt(0, 300)),
-						350, 50);
+				p4 = new Platform((int) (p3.getX() + ThreadLocalRandom.current().nextInt((int) platWidth, (int) (screenWidth / 4))),
+						(int) (p3.getY() + ThreadLocalRandom.current().nextInt(0, (int) (screenHeight / 5))
+								- ThreadLocalRandom.current().nextInt(0, (int) (screenHeight / 5))),
+						(int) platWidth, (int) platHeight);
 				platforms.add(p4);
 			} else if (i == 4) {
-				p5 = new Platform((int) (p4.getX() + ThreadLocalRandom.current().nextInt(350, 500)),
-						(int) (p4.getCenterY() + ThreadLocalRandom.current().nextInt(0, 300)
-								- ThreadLocalRandom.current().nextInt(0, 300)),
-						350, 50);
+				p5 = new Platform((int) (p4.getX() + ThreadLocalRandom.current().nextInt((int) platWidth, (int) (screenWidth / 4))),
+						(int) (p4.getCenterY() + ThreadLocalRandom.current().nextInt(0, (int) (screenHeight / 5))
+								- ThreadLocalRandom.current().nextInt(0, (int) (screenHeight / 5))),
+						(int) platWidth, (int) platHeight);
 				platforms.add(p5);
 			}
-
 		}
 		
 

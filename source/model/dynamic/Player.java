@@ -1,12 +1,8 @@
 package model.dynamic;
 
 import java.awt.Rectangle;
-import java.awt.geom.Line2D;
-import java.awt.geom.Line2D.Double;
-import java.util.ArrayList;
 
 import model.DynamicObject;
-import model.fixed.Collectible;
 import model.fixed.Ground;
 import model.fixed.Platform;
 

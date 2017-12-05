@@ -1,13 +1,10 @@
 package view;
 
-import java.awt.BorderLayout;
 import java.awt.Color;
-
 import java.awt.Dimension;
 import java.awt.Font;
 import java.awt.Graphics;
 import java.awt.Image;
-import java.awt.Rectangle;
 import java.awt.Toolkit;
 import java.awt.image.BufferedImage;
 import java.io.File;
@@ -24,8 +21,17 @@ import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JRadioButton;
-import javax.swing.JTextArea;
 
+import model.dynamic.Enemy;
+import model.fixed.Chest;
+import model.fixed.Collectible;
+import model.fixed.Fact;
+import model.fixed.Ground;
+import model.fixed.Platform;
+import model.fixed.Question;
+import view.dynamic.BirdImage;
+import view.dynamic.CrabImage;
+import view.dynamic.OspreyImage;
 import view.dynamic.ResearcherImage;
 import view.fixed.ChestImage;
 import view.fixed.CollectibleImage;
@@ -33,15 +39,6 @@ import view.fixed.FactImage;
 import view.fixed.GroundImage;
 import view.fixed.HeartImage;
 import view.fixed.PlatformImage;
-import view.dynamic.BirdImage;
-import view.dynamic.*;
-import model.dynamic.*;
-import model.fixed.Chest;
-import model.fixed.Collectible;
-import model.fixed.Fact;
-import model.fixed.Ground;
-import model.fixed.Platform;
-import model.fixed.Question;
 
 /**
  * 
