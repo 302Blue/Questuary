@@ -54,10 +54,10 @@ public class Model {
 	private Platform p5;
 	// offset for ground
 	int groundOffSet = 100;
-	
+
 	// width of a platform
-	double platWidth = (screenWidth/6);
-	double platHeight = (screenHeight/16);
+	double platWidth = (screenWidth / 6);
+	double platHeight = (screenHeight / 16);
 	// array list containing the platform objects
 	private ArrayList<Platform> platforms = new ArrayList<Platform>();
 	// fields for all other world objects
@@ -90,14 +90,11 @@ public class Model {
 	private String name = "";
 	private int gameTimeLeft;
 
-	
-
 	// add Question variables and QuestionMode flag
 	private boolean questionMode = false;
 	// Object containing the questions
 	private QuestionBank QB = new QuestionBank();
 	private Question question;
-	
 
 	// *************************************************
 	// Constructor
@@ -131,25 +128,33 @@ public class Model {
 						(int) platWidth, (int) platHeight);
 				platforms.add(p1);
 			} else if (i == 1) {
-				p2 = new Platform((int) (p1.getX() + ThreadLocalRandom.current().nextInt((int)platWidth, (int) (screenWidth / 4))),
+				p2 = new Platform(
+						(int) (p1.getX()
+								+ ThreadLocalRandom.current().nextInt((int) platWidth, (int) (screenWidth / 4))),
 						(int) (p1.getY() + ThreadLocalRandom.current().nextInt(0, (int) (screenHeight / 5))
 								- ThreadLocalRandom.current().nextInt(0, (int) (screenHeight / 5))),
 						(int) platWidth, (int) platHeight);
 				platforms.add(p2);
 			} else if (i == 2) {
-				p3 = new Platform((int) (p2.getX() + ThreadLocalRandom.current().nextInt((int) platWidth, (int) (screenWidth / 4))),
+				p3 = new Platform(
+						(int) (p2.getX()
+								+ ThreadLocalRandom.current().nextInt((int) platWidth, (int) (screenWidth / 4))),
 						(int) (p2.getY() + ThreadLocalRandom.current().nextInt(0, (int) (screenHeight / 5))
 								- ThreadLocalRandom.current().nextInt(0, (int) (screenHeight / 5))),
 						(int) platWidth, (int) platHeight);
 				platforms.add(p3);
 			} else if (i == 3) {
-				p4 = new Platform((int) (p3.getX() + ThreadLocalRandom.current().nextInt((int) platWidth, (int) (screenWidth / 4))),
+				p4 = new Platform(
+						(int) (p3.getX()
+								+ ThreadLocalRandom.current().nextInt((int) platWidth, (int) (screenWidth / 4))),
 						(int) (p3.getY() + ThreadLocalRandom.current().nextInt(0, (int) (screenHeight / 5))
 								- ThreadLocalRandom.current().nextInt(0, (int) (screenHeight / 5))),
 						(int) platWidth, (int) platHeight);
 				platforms.add(p4);
 			} else if (i == 4) {
-				p5 = new Platform((int) (p4.getX() + ThreadLocalRandom.current().nextInt((int) platWidth, (int) (screenWidth / 4))),
+				p5 = new Platform(
+						(int) (p4.getX()
+								+ ThreadLocalRandom.current().nextInt((int) platWidth, (int) (screenWidth / 4))),
 						(int) (p4.getCenterY() + ThreadLocalRandom.current().nextInt(0, (int) (screenHeight / 5))
 								- ThreadLocalRandom.current().nextInt(0, (int) (screenHeight / 5))),
 						(int) platWidth, (int) platHeight);
@@ -166,14 +171,14 @@ public class Model {
 		collectibles.add(firstCollectible);
 		System.out.println("First Collectible Created");
 
-		if(isIntroMode) {
+		if (isIntroMode) {
 			platforms.clear();
 			enemies.clear();
 			collectibles.clear();
 			facts.clear();
 			chests.clear();
 		}
-		
+
 	}
 
 	// *************************************************
@@ -315,18 +320,18 @@ public class Model {
 		for (Enemy enemy : enemies) {
 			if (enemy.isKillable()) {
 				if ((player.getBottomSide()).intersects(enemy) && player.isAbleToAttack()) {
+
 					player.setLocation((int) player.getX(), (int) player.getY() - 25);
 					enemy.setIsDead();
-					// continue;
+					player.incrementScoreBy(5);
 				}
 			}
 
 			if ((!enemy.isDead()) && enemy.intersects(player) && !(enemy.getHasAttacked())) {
-				
-				if(!isIntroMode) {
+
+				if (!isIntroMode) {
 					enemy.damage(player);
 				}
-				enemy.setHasAttacked(true);
 
 				if (!(this.horizontalCollision(enemy))) {
 					// if enemy hit left side of player
@@ -342,6 +347,8 @@ public class Model {
 						player.setLocation(x, y);
 					}
 				}
+				enemy.setHasAttacked(true);
+
 			} else if (!enemy.intersects(player)) {
 				enemy.setHasAttacked(false);
 			}
@@ -353,7 +360,7 @@ public class Model {
 	 * 
 	 * @param enemy
 	 *            - enemy you're colliding with
-	 * @return true if collision, false if no collision
+	 * @return boolean - true if collision, false if no collision
 	 */
 	private boolean horizontalCollision(Enemy enemy) {
 		for (Platform platform : platforms) {
@@ -371,26 +378,21 @@ public class Model {
 
 	/**
 	 * Handles Collectible collisions with a player Generates new fact after
-	 * clearing previous fact adds collectible to collected Increments score by 5
+	 * clearing previous fact adds collectible to collected Increments score by 10
 	 */
 	private void checkCollisionCollectible() {
 		for (Iterator<Collectible> collectIter = collectibles.iterator(); collectIter.hasNext();) {
 			Collectible c = collectIter.next();
 			if (player.intersects(c)) {
-				if (isIntroMode) {
-					// intro fact
-					facts.clear();
-				} else {
-					// ensure that no more than one fact is displayed at a time
-					facts.clear();
-					// generate new fact object
-					facts.add(new Fact());
-				}
+				// ensure that no more than one fact is displayed at a time
+				facts.clear();
+				// generate new fact object
+				facts.add(new Fact(isIntroMode));
 				// add collectible to collected
 				collected.add(new Collectible(numCollected));
 				// increment number collected and score
 				numCollected++;
-				player.incrementScoreBy(5);
+				player.incrementScoreBy(10);
 				// print score
 				System.out.println("Score: " + player.getScore());
 				// remove collectible from screen
@@ -400,8 +402,8 @@ public class Model {
 	}
 
 	/**
-	 * Checks if the player collides with a chest Opens the chest sets questionMode
-	 * to true And then generates a question
+	 * Checks if the player collides with a chest, Opens the chest and sets
+	 * questionMode to true, and then generates a question
 	 */
 	private void checkCollisionChest() {
 		for (Iterator<Chest> chestIter = chests.iterator(); chestIter.hasNext();) {
@@ -438,23 +440,25 @@ public class Model {
 			chests.clear();
 			facts.clear();
 			enemies.clear();
-			if(!isIntroMode) {
+			if (!isIntroMode) {
 				createNewPlatform();
-			}else {
+			} else {
 				switch (introRoomNum) {
-				case 1: setPlatform((int)(screenWidth/3),(int)(screenHeight/2)); // use this method to place custom platforms for intro
-				break;
-				case 2: 
-					setPlatform((int)(screenWidth/3),(int)(screenHeight/1.5)); 
+				case 1:
+					setPlatform((int) (screenWidth / 3), (int) (screenHeight / 1.5)); // use this method to place custom
+																						// platforms for intro
+					break;
+				case 2:
+					setPlatform((int) (screenWidth / 3), (int) (screenHeight / 1.5));
 					collectibles.add(new Collectible(platforms.get(0)));
-					setPlatform((int)(screenWidth/2),(int)(screenHeight/1.5)); 
+					setPlatform((int) (screenWidth / 1.5), (int) (screenHeight / 1.5));
 					chests.add(new Chest(platforms.get(1)));
-				break;
+					break;
 				case 3:
-					setPlatform((int)(screenWidth/3),(int)(screenHeight/1.5)); 
+					setPlatform((int) (screenWidth / 3), (int) (screenHeight / 1.5));
 					enemies.add(new EnemyCrab(platforms.get(0)));
 					enemies.add(new EnemyOsprey((int) screenWidth, (int) screenHeight));
-				break;
+					break;
 				}
 			}
 		}
@@ -468,13 +472,19 @@ public class Model {
 	}
 
 	/**
+	 * Method to increment score
+	 */
+	public void incrementPlayerScoreBy(int i) {
+		player.incrementScoreBy(i);
+	}
+
+	/**
 	 * Generates new question
 	 */
 	private void generateQuestion() {
 		question = QB.pickQuestion(this.numCollected);
 	}
 
-	// end of Question methods
 	/**
 	 * Randomly generate new room
 	 *
@@ -495,32 +505,39 @@ public class Model {
 						(int) platWidth, (int) platHeight);
 				platforms.add(p1);
 			} else if (i == 1) {
-				p2 = new Platform((int) (p1.getX() + ThreadLocalRandom.current().nextInt((int)platWidth, (int) (screenWidth / 4))),
+				p2 = new Platform(
+						(int) (p1.getX()
+								+ ThreadLocalRandom.current().nextInt((int) platWidth, (int) (screenWidth / 4))),
 						(int) (p1.getY() + ThreadLocalRandom.current().nextInt(0, (int) (screenHeight / 5))
 								- ThreadLocalRandom.current().nextInt(0, (int) (screenHeight / 5))),
 						(int) platWidth, (int) platHeight);
 				platforms.add(p2);
 			} else if (i == 2) {
-				p3 = new Platform((int) (p2.getX() + ThreadLocalRandom.current().nextInt((int) platWidth, (int) (screenWidth / 4))),
+				p3 = new Platform(
+						(int) (p2.getX()
+								+ ThreadLocalRandom.current().nextInt((int) platWidth, (int) (screenWidth / 4))),
 						(int) (p2.getY() + ThreadLocalRandom.current().nextInt(0, (int) (screenHeight / 5))
 								- ThreadLocalRandom.current().nextInt(0, (int) (screenHeight / 5))),
-						(int)platWidth, (int) platHeight);
+						(int) platWidth, (int) platHeight);
 				platforms.add(p3);
 			} else if (i == 3) {
-				p4 = new Platform((int) (p3.getX() + ThreadLocalRandom.current().nextInt((int) platWidth, (int) (screenWidth / 4))),
+				p4 = new Platform(
+						(int) (p3.getX()
+								+ ThreadLocalRandom.current().nextInt((int) platWidth, (int) (screenWidth / 4))),
 						(int) (p3.getY() + ThreadLocalRandom.current().nextInt(0, (int) (screenHeight / 5))
 								- ThreadLocalRandom.current().nextInt(0, (int) (screenHeight / 5))),
 						(int) platWidth, (int) platHeight);
 				platforms.add(p4);
 			} else if (i == 4) {
-				p5 = new Platform((int) (p4.getX() + ThreadLocalRandom.current().nextInt((int) platWidth, (int) (screenWidth / 4))),
+				p5 = new Platform(
+						(int) (p4.getX()
+								+ ThreadLocalRandom.current().nextInt((int) platWidth, (int) (screenWidth / 4))),
 						(int) (p4.getCenterY() + ThreadLocalRandom.current().nextInt(0, (int) (screenHeight / 5))
 								- ThreadLocalRandom.current().nextInt(0, (int) (screenHeight / 5))),
 						(int) platWidth, (int) platHeight);
 				platforms.add(p5);
 			}
 		}
-		
 
 		// random crab & collectible generators
 		Random random = new Random(System.currentTimeMillis());
@@ -570,12 +587,12 @@ public class Model {
 	 * 
 	 */
 	public void updateHighScore() {
-		if(isNewHighScore()) {
+		if (isNewHighScore()) {
 			highScore = name + ": " + player.getScore();
-		}else {
+		} else {
 			highScore = name + ": " + highScore.split(": ")[1];
 		}
-		
+
 		File scoreFile = new File("HighScore.dat");
 		if (!scoreFile.exists()) {
 			try {
@@ -656,7 +673,7 @@ public class Model {
 	public int getIntroRoomNum() {
 		return introRoomNum;
 	}
-	
+
 	/**
 	 * Returns the screen X-Boundary
 	 *
@@ -959,11 +976,9 @@ public class Model {
 		return gameTimeLeft;
 	}
 
-
 	// *************************************************
 	// Setters
-	
-	
+
 	/**
 	 * Create a single platform in a certain location
 	 * 
@@ -973,8 +988,8 @@ public class Model {
 	 *            - The y location of platform
 	 * 
 	 */
-	public void setPlatform(int x , int y) {
-		p1 = new Platform(x,y, 350, 50);
+	public void setPlatform(int x, int y) {
+		p1 = new Platform(x, y, 350, 50);
 		platforms.add(p1);
 	}
 
@@ -1023,7 +1038,6 @@ public class Model {
 		changeCharacterCount--;
 	}
 
-
 	/**
 	 * Sets the changeCharacterMode variable
 	 * 
@@ -1070,7 +1084,7 @@ public class Model {
 	 * Checks the player's health and sets isGameOver accordingly
 	 */
 	public void checkIsGameOver() {
-		if (player.getHealth() <= 0  || getGameTimeLeft() == 0 && !isIntroMode) {
+		if (player.getHealth() <= 0 || getGameTimeLeft() == 0 && !isIntroMode) {
 			setIsGameOver(true);
 		} else {
 			setIsGameOver(false);
@@ -1080,7 +1094,8 @@ public class Model {
 	/**
 	 * Sets the isGameOver variable
 	 * 
-	 * @param value - Boolean for whether game is over or not
+	 * @param value
+	 *            - Boolean for whether game is over or not
 	 */
 	public void setIsGameOver(boolean value) {
 		isGameOver = value;
@@ -1106,9 +1121,9 @@ public class Model {
 			readFile = new FileReader("BadWords.txt");
 			reader = new BufferedReader(readFile);
 			// return reader.readLine();
-			String testWord = ""; 
-			while((testWord = reader.readLine()) != null) {
-				if((this.name.toLowerCase()).contains(testWord)) {
+			String testWord = "";
+			while ((testWord = reader.readLine()) != null) {
+				if ((this.name.toLowerCase()).contains(testWord)) {
 					this.name = "Nobody";
 				}
 			}
@@ -1127,7 +1142,7 @@ public class Model {
 			}
 		}
 	}
-	
+
 	/**
 	 * Adds new word to bad words list
 	 * 
@@ -1135,10 +1150,10 @@ public class Model {
 	public void addBadWord() {
 		String wordToAdd = (getHighScore().split(": ")[0]).toLowerCase();
 		String score = getHighScore().split(": ")[1];
-		if(!wordToAdd.equalsIgnoreCase("nobody")) {
+		if (!wordToAdd.equalsIgnoreCase("nobody")) {
 			BufferedWriter writer = null;
 			FileWriter writeFile = null;
-			
+
 			try {
 				File file = new File("BadWords.txt");
 
@@ -1152,7 +1167,6 @@ public class Model {
 				writer = new BufferedWriter(writeFile);
 				writer.newLine();
 				writer.write(wordToAdd);
-
 
 			} catch (IOException e) {
 
@@ -1176,8 +1190,6 @@ public class Model {
 			}
 		}
 
-
 	}
-	
 
 }

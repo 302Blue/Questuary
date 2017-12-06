@@ -17,9 +17,9 @@ public class Player extends DynamicObject {
 
 	// health of the player
 	private int health = 3;
-	// The state of the player
+	// the state of the player
 	private String state = "researcher";
-	// Assuming only player can jump and fall
+	// assuming only player can jump and fall
 	private int maxDy = 15;
 	private int minDy = -15;
 	// for jumping
@@ -104,7 +104,7 @@ public class Player extends DynamicObject {
 			playerFalling();
 		}
 
-		else if (y < ( -(super.getHeight()) *(0.75) ) ) {
+		else if (y < (-(super.getHeight()) * (0.75))) {
 			falling = true;
 			jumping = false;
 		}
@@ -131,6 +131,7 @@ public class Player extends DynamicObject {
 			}
 
 		}
+
 		// if player is on a surface then set dy to 0
 		else {
 			super.setDy(0);

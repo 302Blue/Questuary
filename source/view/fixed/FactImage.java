@@ -20,7 +20,7 @@ public class FactImage extends ImageObject {
 	private int imgWidth = 300;
 	private int imgHeight = 200;
 
-	private int frameCount = 10;
+	private int frameCount = 12;
 
 	private BufferedImage[] pics = new BufferedImage[frameCount];
 
@@ -28,18 +28,21 @@ public class FactImage extends ImageObject {
 	// Constructor
 
 	/**
-	 * Constructor for Fact image Places images from file in pics array
+	 * Constructor for Fact image, Places images from file in pics array
 	 */
 	public FactImage() {
 		super.setName("fact");
 
 		// load in the images
 		for (int i = 0; i < frameCount; i++) {
-			BufferedImage image = createImage("images/facts/Fact (" + (i + 1) + ")" + ".png");
+			BufferedImage image = createImage("images/facts/Fact (" + (i) + ")" + ".png");
+			//BufferedImage introImage = createImage("images/facts/Fact (0).png");
 			pics[i] = image;
+			
 		}
 	}
 
+	
 	// *************************************************
 	// Methods
 

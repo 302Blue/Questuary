@@ -12,7 +12,7 @@ public class Fact extends StaticObject {
 	private static int yLoc;
 
 	// scroll to next fact
-	private static int picIter = 0;
+	private static int picIter;
 
 	// *************************************************
 	// Constructor
@@ -20,13 +20,15 @@ public class Fact extends StaticObject {
 	/**
 	 * Constructor for the facts
 	 */
-	public Fact() {
+	public Fact(boolean introMode) {
 		super.setName("fact");
 
-		if (picIter < 10) {
+		if (introMode) {
+			picIter = 0;
+		} else if (picIter < 10){
 			picIter++;
 		} else {
-			picIter = 0;
+			picIter = 1;
 		}
 
 		// set the dimensions
