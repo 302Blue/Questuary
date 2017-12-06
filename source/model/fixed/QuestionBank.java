@@ -12,8 +12,14 @@ import java.util.Random;
  */
 public class QuestionBank {
 
+	// *************************************************
+	// Fields
+
 	ArrayList<Question> questions = new ArrayList<Question>();
 
+	// *************************************************
+	// Constructor
+	
 	/**
 	 * Constructor for QuestionBank object
 	 */
@@ -34,9 +40,11 @@ public class QuestionBank {
 				String reason = br.readLine();
 				questions.add(new Question(question, answers, cAns, reason));
 			}
+			
 		} catch (IOException e) {
 			System.out.println("Error with file reading");
 			e.printStackTrace();
+			
 		} finally {
 			try {
 				if (br != null) {
@@ -51,6 +59,10 @@ public class QuestionBank {
 			}
 		}
 	}
+	
+
+	// *************************************************
+	// Methods
 
 	/**
 	 * Randomly picks a question from the ArrayList of questions

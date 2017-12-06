@@ -9,13 +9,8 @@ import java.util.ArrayList;
 import javax.swing.JFrame;
 import javax.swing.Timer;
 
-import controller.Controller.ArrowKeyListener;
-import controller.Controller.QuestionKeyListener;
-import controller.Controller.UpdateView;
 import model.Model;
-import model.fixed.Question;
 import view.IntroView;
-import view.View;
 
 public class IntroController {
 	

@@ -1,13 +1,10 @@
 package view;
 
-import java.awt.BorderLayout;
 import java.awt.Color;
-
 import java.awt.Dimension;
 import java.awt.Font;
 import java.awt.Graphics;
 import java.awt.Image;
-import java.awt.Rectangle;
 import java.awt.Toolkit;
 import java.awt.image.BufferedImage;
 import java.io.File;
@@ -24,8 +21,17 @@ import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JRadioButton;
-import javax.swing.JTextArea;
 
+import model.dynamic.Enemy;
+import model.fixed.Chest;
+import model.fixed.Collectible;
+import model.fixed.Fact;
+import model.fixed.Ground;
+import model.fixed.Platform;
+import model.fixed.Question;
+import view.dynamic.BirdImage;
+import view.dynamic.CrabImage;
+import view.dynamic.OspreyImage;
 import view.dynamic.ResearcherImage;
 import view.fixed.ChestImage;
 import view.fixed.CollectibleImage;
@@ -33,15 +39,6 @@ import view.fixed.FactImage;
 import view.fixed.GroundImage;
 import view.fixed.HeartImage;
 import view.fixed.PlatformImage;
-import view.dynamic.BirdImage;
-import view.dynamic.*;
-import model.dynamic.*;
-import model.fixed.Chest;
-import model.fixed.Collectible;
-import model.fixed.Fact;
-import model.fixed.Ground;
-import model.fixed.Platform;
-import model.fixed.Question;
 
 /**
  * 
@@ -198,8 +195,8 @@ public class View extends JPanel {
 	@Override
 	public void paint(Graphics g) {
 		dynamicTimeBar = 10 * (gameTimeLeft / 3);
-		
-		if (!changeCharacterMode && !gameOverMode ) {
+
+		if (!changeCharacterMode && !gameOverMode) {
 			// paint score
 			g.setFont(new Font("TimesRoman", Font.PLAIN, 50));
 			g.drawString("Score:" + score, (int) screenWidth - 225, 96);
@@ -269,7 +266,7 @@ public class View extends JPanel {
 			}
 
 			// paint facts
-			Fact.setxLoc(GameTimeBarXPos + 25);
+			Fact.setxLoc(GameTimeBarXPos/2 + 100);
 			Fact.setyLoc(GameTimeBarYPos + GameTimeBarHeight);
 			for (Fact fact : facts) {
 				ImageObject factImg = characterImages.get(fact.getName());
@@ -443,6 +440,7 @@ public class View extends JPanel {
 	/**
 	 * Displays if the correct answer is chosen
 	 * 
+	 *
 	 * @param q
 	 *            - Question object to be used
 	 */
@@ -451,24 +449,24 @@ public class View extends JPanel {
 		questionBox.setVisible(false);
 
 		Box correctBox = Box.createVerticalBox();
-		
+
 		JLabel question = new JLabel("<html>" + q.getQuestion() + "<html>");
 		question.setFont(new Font("SansSerif", Font.BOLD, 25));
-		
-		JLabel correctMessage = new JLabel("CORRECT");
-		correctMessage.setHorizontalAlignment(JLabel.CENTER);
-		correctMessage.setFont(new Font("Serif", Font.BOLD, 30));
-		correctMessage.setForeground(Color.GREEN);
-		
-		JLabel healthMessage = new JLabel( "<html>" + "Congradulations you get an extra health" + "<html>");
-		healthMessage.setFont(new Font("Monospaced",Font.BOLD,20));
+
+		JLabel correctMsg = new JLabel("CORRECT");
+		correctMsg.setHorizontalAlignment(JLabel.CENTER);
+		correctMsg.setFont(new Font("Serif", Font.BOLD, 30));
+		correctMsg.setForeground(Color.GREEN);
+
+		JLabel healthMessage = new JLabel("<html>" + "Congradulations you get 25 point and extra health" + "<html>");
+		healthMessage.setFont(new Font("Monospaced", Font.BOLD, 20));
 		ImageIcon heart = new ImageIcon("images/world/Heart.png");
 		JLabel icon = new JLabel(heart);
-		
+
 		JLabel continueMessage = new JLabel("Press the Right Key to continue your adventure");
-		
+
 		correctBox.add(question);
-		correctBox.add(correctMessage);
+		correctBox.add(correctMsg);
 		correctBox.add(healthMessage);
 		correctBox.add(icon);
 		correctBox.add(continueMessage);
@@ -489,28 +487,29 @@ public class View extends JPanel {
 		questionBox.setVisible(false);
 
 		Box wrongBox = Box.createVerticalBox();
-		
 
 		JLabel question = new JLabel("<html>" + q.getQuestion() + "<html>");
 		question.setFont(new Font("SansSerif", Font.BOLD, 25));
-		JLabel wrong = new JLabel("SORRY, WRONG");
-		wrong.setFont(new Font("Serif", Font.BOLD, 30));
-		wrong.setForeground(Color.RED);
-		JLabel message = new JLabel("The right answer is:.... ");
-		JLabel correctAnswer = new JLabel("<html>" + q.getCorrectAnswer()+ "<html>");
+
+		JLabel wrongMsg = new JLabel("WRONG");
+		wrongMsg.setHorizontalAlignment(JLabel.CENTER);
+		wrongMsg.setFont(new Font("Serif", Font.BOLD, 30));
+		wrongMsg.setForeground(Color.RED);
+
+		JLabel correctMsg = new JLabel("The right answer is:.... ");
+		JLabel correctAnswer = new JLabel("<html>" + q.getCorrectAnswer() + "<html>");
 		correctAnswer.setFont(new Font("Serif", Font.BOLD, 18));
-		
+
 		JLabel reason = new JLabel("<html>" + "Explanation: " + q.getReason() + "<html>");
 		reason.setFont(new Font("Monospaced", Font.BOLD, 25));
-		
+
 		wrongBox.add(question);
-		wrongBox.add(wrong);
-		wrongBox.add(message);
+		wrongBox.add(wrongMsg);
+		wrongBox.add(correctMsg);
 		wrongBox.add(correctAnswer);
 		wrongBox.add(reason);
 		wrongBox.add(new JLabel("Press the Right Key to continue your adventure"));
-		
-		
+
 		wrongBox.setVisible(true);
 
 		questionFrame.add(wrongBox);
@@ -557,8 +556,7 @@ public class View extends JPanel {
 	 */
 	public String getName() {
 		String name = JOptionPane.showInputDialog("You set a new highscore. What is your name?");
-		if(name == null || name.equalsIgnoreCase(""))
-		{
+		if (name == null || name.equalsIgnoreCase("")) {
 			return "Nobody";
 		}
 		return name;

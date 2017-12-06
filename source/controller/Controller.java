@@ -1,7 +1,5 @@
 package controller;
 
-import java.awt.Rectangle;
-import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
@@ -10,11 +8,10 @@ import java.util.ArrayList;
 
 import javax.swing.JFrame;
 import javax.swing.Timer;
-import controller.Controller.QuestionKeyListener;
-import view.IntroductionView;
-import view.View;
+
 import model.Model;
 import model.fixed.Question;
+import view.View;
 
 /**
  * @author Andrew Baldwin, Matt Billone, David Chan, Akash Sharma, Vineeth Gutta
@@ -93,9 +90,7 @@ public class Controller {
 		gameTimer = new Timer(1000, new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
 				gameTimeLeft--;
-				if (gameTimeLeft == 0) {
-					gameTimer.stop();
-				}
+				
 			}
 		});
 		gameTimer.start();
@@ -127,6 +122,10 @@ public class Controller {
 		 *            - Basic argument for a the actionPerformed function
 		 */
 		public void actionPerformed(ActionEvent arg0) {
+			if (gameTimeLeft == 0) {
+				gameTimer.stop();
+				model.setIsGameOver(true);
+			}
 			if (model.getIsGamePaused()) {
 				gameTimer.stop();
 			} else {
@@ -140,10 +139,14 @@ public class Controller {
 				questionMode = model.isQuestionMode();
 				if (questionMode) {
 					// pause the game timer
+					gameTimer.stop();
 					question = model.getQuestion();
 					questionFrame = view.createQuestionFrame(question);
 					questionFrame.addKeyListener(new QuestionKeyListener());
 					questionFrame.requestFocus();
+				}
+				else {
+					gameTimer.start();
 				}
 				// end of QuestionMode
 
@@ -400,7 +403,6 @@ public class Controller {
 		 *            - Which key is pressed
 		 */
 		public void keyPressed(KeyEvent arg0) {
-			// TODO Auto-generated method stub
 			if (allowInput) {
 				switch (arg0.getKeyCode()) {
 				case (KeyEvent.VK_UP):
@@ -419,7 +421,7 @@ public class Controller {
 						if (question.right()) {
 							view.displayCorrect(question);
 							model.incrementPlayerHealth();
-
+							model.incrementPlayerScoreBy(25);
 						} else {
 							view.displayWrong(question);
 						}
@@ -435,12 +437,10 @@ public class Controller {
 		}
 
 		public void keyReleased(KeyEvent arg0) {
-			// TODO Auto-generated method stub
 
 		}
 
 		public void keyTyped(KeyEvent arg0) {
-			// TODO Auto-generated method stub
 
 		}
 	}
