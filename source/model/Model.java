@@ -557,7 +557,7 @@ public class Model {
 			if (randomNum == 0) {
 				enemies.add(new EnemyCrab(platform));
 				System.out.println("New Enemy Crab Created");
-			} else if (randomNum == 1) {
+			} else if (randomNum == 1 || randomNum == 2) {
 				collectibles.add(new Collectible(platform));
 				System.out.println("New Collectible Created");
 			} else if (chestCreated) {
@@ -1015,6 +1015,15 @@ public class Model {
 	 */
 	public void setPlayerDxOff() {
 		player.setDxOff();
+	}
+	
+	/**
+	 * Set player's health
+	 * 
+	 * @param i - Set player's health to i
+	 */
+	public void setPlayerHealth(int i) {
+		player.setHealth(i);
 	}
 
 	/**
