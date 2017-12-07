@@ -1,6 +1,5 @@
 package view.fixed;
 
-import java.awt.Toolkit;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
@@ -17,13 +16,8 @@ public class GroundImage extends ImageObject {
 	// *************************************************
 	// Fields
 
-	// get screen's dimensions
-	private double screenWidth = Toolkit.getDefaultToolkit().getScreenSize().getWidth();
-	private double screenHeight = Toolkit.getDefaultToolkit().getScreenSize().getHeight();
-	private double screenRatio = screenWidth / screenHeight;
-
 	// set the image's dimensions
-	private int imgWidth = (int) (screenWidth * 2);
+	private int imgWidth = (int) (super.getScreenWidth() * 2);
 	private int imgHeight = 100;
 
 	private int frameCount = 1;

@@ -77,8 +77,10 @@ public class Model {
 	private boolean isQuestionMode = false;
 	private boolean isGamePaused = false;
 	private boolean isGameOver = false;
-	// intro Mode fields
 	private boolean isIntroMode;
+	// add Question variables and QuestionMode flag
+	private boolean questionMode = false;
+
 	int introRoomNum = 0;
 	// character number
 	private int changeCharacterCount = 0;
@@ -90,8 +92,6 @@ public class Model {
 	private String name = "";
 	private int gameTimeLeft;
 
-	// add Question variables and QuestionMode flag
-	private boolean questionMode = false;
 	// Object containing the questions
 	private QuestionBank QB = new QuestionBank();
 	private Question question;

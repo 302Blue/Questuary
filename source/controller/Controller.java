@@ -38,7 +38,6 @@ public class Controller {
 	Question question;
 	JFrame questionFrame;
 	boolean isIntroMode = false;
-	// end question
 
 	// *************************************************
 	// Constructor
