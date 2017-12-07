@@ -122,9 +122,11 @@ public class Controller {
 		 *            - Basic argument for a the actionPerformed function
 		 */
 		public void actionPerformed(ActionEvent arg0) {
-			if (gameTimeLeft == 0) {
+			System.out.println("Controller Time: " +gameTimeLeft);
+			System.out.println("Model Time: " +model.getGameTimeLeft());
+			System.out.println("Model Game Over: " +model.getIsGameOver());
+			if (gameTimeLeft < 1) {
 				gameTimer.stop();
-				model.setIsGameOver(true);
 			}
 			if (model.getIsGamePaused()) {
 				gameTimer.stop();
@@ -152,6 +154,7 @@ public class Controller {
 
 				view.setGameTime(gameTimeLeft);
 				model.setGameTimeLeft(gameTimeLeft);
+				model.checkIsGameOver();
 				model.changeRoom();
 				model.checkCollision();
 				model.gravity();
@@ -181,9 +184,6 @@ public class Controller {
 				view.updateView(model.getPlayerX(), model.getPlayerY(), model.getPlayerDirection(),
 						model.getPlayerCharacter(), model.getPlayerHealth());
 				if (model.getIsGameOver() || gameTimeLeft == 0) {
-					if (!model.getIsGameOver()) {
-						model.setIsGameOver(true);
-					}
 					// controls for game over state
 					if (model.isNewHighScore()) {
 						String name = view.getName();

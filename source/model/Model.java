@@ -449,13 +449,13 @@ public class Model {
 																						// platforms for intro
 					break;
 				case 2:
-					setPlatform((int) (screenWidth / 3), (int) (screenHeight / 1.5));
+					setPlatform((int) (screenWidth / 3), (int) (screenHeight / 1.5) + 75);
 					collectibles.add(new Collectible(platforms.get(0)));
-					setPlatform((int) (screenWidth / 1.5), (int) (screenHeight / 1.5));
+					setPlatform((int) (screenWidth / 1.5), (int) (screenHeight / 1.5) + 75);
 					chests.add(new Chest(platforms.get(1)));
 					break;
 				case 3:
-					setPlatform((int) (screenWidth / 3), (int) (screenHeight / 1.5));
+					setPlatform((int) (screenWidth / 3), (int) (screenHeight / 1.5) + 75);
 					enemies.add(new EnemyCrab(platforms.get(0)));
 					enemies.add(new EnemyOsprey((int) screenWidth, (int) screenHeight));
 					break;
@@ -1052,7 +1052,7 @@ public class Model {
 	 * 
 	 */
 	public void setIsGamePaused() {
-		if (getChangeCharacterMode() || getIsQuestionMode()) {
+		if (getChangeCharacterMode() || getIsQuestionMode() ) {
 			isGamePaused = true;
 		} else {
 			isGamePaused = false;
@@ -1068,6 +1068,7 @@ public class Model {
 	 */
 	public void setIsQuestionMode(boolean value) {
 		isQuestionMode = value;
+		//setIsGamePaused(); // uncomment if you want to keep time paused in question mode
 	}
 
 	/**
@@ -1084,7 +1085,7 @@ public class Model {
 	 * Checks the player's health and sets isGameOver accordingly
 	 */
 	public void checkIsGameOver() {
-		if (player.getHealth() <= 0 || getGameTimeLeft() == 0 && !isIntroMode) {
+		if (player.getHealth() <= 0 || getGameTimeLeft() < 1 && !isIntroMode) {
 			setIsGameOver(true);
 		} else {
 			setIsGameOver(false);
