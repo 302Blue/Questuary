@@ -56,7 +56,6 @@ public class IntroView extends JPanel {
 	// get the screen's dimensions
 	final private double screenWidth = Toolkit.getDefaultToolkit().getScreenSize().getWidth();
 	final private double screenHeight = Toolkit.getDefaultToolkit().getScreenSize().getHeight();
-	final private double screenRatio = screenWidth / screenHeight;
 	// player's x and y coordinates
 	int playerX = 0;
 	int playerY = 0;
@@ -92,20 +91,10 @@ public class IntroView extends JPanel {
 	final private int ChangeCharacterMenuWidth = 700;
 	// game over screen fields
 	Image GameOverScreen;
-	final private int GameOverScreenHeight = (int) screenHeight - 100;
 	final private int GameOverScreenWidth = (int) screenWidth - 100;
-	final private int GameOverScreenXPos = 50;
-	final private int GameOverScreenYPos = 25;
-	// game over score positions
-	final private int GameOverScoreXPos = 75;
-	final private int GameOverScoreYPos = 275;
-	final private int GameOverHighScoreXPos = 75;
-	final private int GameOverHighScoreYPos = 400;
 	// high-score fields
 	public String highScore = "";
 	public String score = "";
-	// game time field
-	private int gameTimeLeft;
 	final private int GameTimeBarHeight = 35;
 	final private int GameTimeBarWidth = 450;
 	final private int GameTimeBarXPos = GameOverScreenWidth / 2 - GameTimeBarWidth / 2;
@@ -118,9 +107,9 @@ public class IntroView extends JPanel {
 	ArrayList<JRadioButton> buttons = new ArrayList<JRadioButton>();
 	Box questionBox;
 
-	//Intro room umber
+	// Intro room number
 	int introRoomNum;
-	
+
 	// *************************************************
 	// Constructor
 
@@ -179,38 +168,65 @@ public class IntroView extends JPanel {
 	@Override
 	public void paint(Graphics g) {
 		// display stuff here for separate rooms
-		int stringX = (int)(screenWidth * 0.1);
-		int stringY = (int)(screenHeight * 0.25);
-		switch (introRoomNum) {
-			case 0:
-				g.setColor(Color.cyan);
-				g.setFont(new Font("Garamond", Font.BOLD, 50));
-				g.drawString("Use LEFT & RIGHT ARROW KEY to move, UP KEY to jump", stringX, stringY);
-			break;
-			case 1: 
-				g.setColor(Color.CYAN);
-				g.setFont(new Font("Garamond", Font.BOLD, 50));
-				g.drawString("Press DOWN AND RIGHT to change characters", stringX, stringY);
-				g.drawString("Use the BIRD character to JUMP HIGHER", stringX + 50, stringY + 50);
-			break;
-			case 2: 
-				g.setColor(Color.CYAN);
-				g.setFont(new Font("Garamond", Font.BOLD, 50));
-				g.drawString("Collect HORSESHOE CRABS to see a FACT and INCREASE your SCORE", stringX, stringY);
-				g.drawString("After 3 COLLECTIBLES, go to the CHEST to ANSWER A QUESTION", stringX + 50, stringY + 50);
-			break;
-			case 3: 
-				g.setColor(Color.CYAN);
-				g.setFont(new Font("Garamond", Font.BOLD, 50));
-				g.drawString("WATCH OUT for the OSPREY", stringX, stringY);
-				g.drawString("JUMP on the GREEN EUROPEAN CRAB, but DON'T GET TOUCHED", stringX + 50, stringY + 50);
-				g.drawString("START GAME ->", (int)(screenWidth * 0.7), (int)(screenHeight * 0.8));
-			break;
-					
-		}
+		int imageWidth = 100;
+		int imageHeight = 100;
 		
+		switch (introRoomNum) {
+		case 0:
+			g.setColor(Color.CYAN);
+			g.setFont(new Font("Garamond", Font.BOLD, 50));
+			try {
+				Image leftKey = ImageIO.read(new File("images/intro/LeftKey.png"));
+				Image upKey = ImageIO.read(new File("images/intro/UpKey.png"));
+				Image rightKey = ImageIO.read(new File("images/intro/RightKey.png"));
+				
+				g.drawImage(leftKey, (int)(imageWidth*1.5), (int)(screenHeight/3), imageWidth, imageHeight, this);
+				g.drawString("Left Key = Move Left", 0, (int)(screenHeight/3 + imageHeight*1.5));
+				
+				g.drawImage(upKey, (int)(screenWidth/2 - imageWidth), (int)(screenHeight/3), imageWidth, imageHeight, this);
+				g.drawString("Up Key = Jump", (int)(screenWidth/2 - imageWidth*2.35), (int)(screenHeight/3 + imageHeight*1.5));
+				
+				g.drawImage(rightKey, (int)(screenWidth - imageWidth*3.2), (int)(screenHeight/3), imageWidth, imageHeight, this);
+				g.drawString("Right Key = Move Right", (int)(screenWidth - imageWidth*5.2), (int)(screenHeight/3 + imageHeight*1.5));
+			} catch (IOException except) { except.printStackTrace(); }
+			break;
+		case 1:
+			g.setColor(Color.CYAN);
+			g.setFont(new Font("Garamond", Font.BOLD, 50));
+			
+			try {
+				Image downrightKey = ImageIO.read(new File("images/intro/DownRightKey.png"));
+				imageWidth = imageWidth*2;
+				
+				g.drawImage(downrightKey, (int)(screenWidth/2 - imageWidth), (int)(screenHeight/3), imageWidth, imageHeight, this);
+				g.drawString("DOWN & RIGHT = Change Characters", (int)(screenWidth/2 - imageWidth*2.6), (int)(screenHeight/3 + imageHeight*1.5));
+			} catch (IOException except) { except.printStackTrace(); }
+			break;
+		case 2:
+			g.setColor(Color.CYAN);
+			g.setFont(new Font("Garamond", Font.BOLD, 50));
+			
+			g.drawString("Each Horseshoe Crab is 10 Points, and Displays A Fact", (int)(screenWidth/4 - imageWidth), (int)(screenHeight/3 + imageHeight*1.5));
+			g.drawString("After Collecting 3 Horseshoe Crabs, A Question Chest Appears ", (int)(screenWidth/4 - imageWidth + 50), (int)(screenHeight/3 + imageHeight*1.5 + 50));
+			break;
+		case 3:
+			g.setColor(Color.CYAN);
+			g.setFont(new Font("Garamond", Font.BOLD, 50));
+			
+			g.drawString("Avoid The Ospreys!",(int)(screenWidth/2.5 - imageWidth), (int)(screenHeight/3 + imageHeight*1.5));
+			g.drawString("You Can Jump On Top of The Crabs, But Don't Let Them Hit You!", (int)(screenWidth/6 - imageWidth), (int)(screenHeight/3 + imageHeight*1.5 + 50));
+			
+			try {
+				Image rightKey = ImageIO.read(new File("images/intro/RightKey.png"));
+				g.drawImage(rightKey, (int) (screenWidth * 0.8 + 100), (int) (screenHeight * 0.8) , 100, 100, this);
+				g.drawString("START GAME", (int) (screenWidth * 0.8), (int) (screenHeight * 0.8));
+			} catch (IOException except) { except.printStackTrace(); }
+			break;
+
+		}
+
 		if (!changeCharacterMode) {
-	
+
 			// paint character image
 			if (playerCharacter == "researcher") {
 				g.drawImage(researcherImage.show(direct), playerX, playerY, researcherImage.getWidth(),
@@ -219,8 +235,9 @@ public class IntroView extends JPanel {
 				g.drawImage(birdImage.show(direct), playerX, playerY, birdImage.getWidth(), birdImage.getHeight(),
 						this);
 			}
+
 			// paint platform images
-			if(!platforms.isEmpty()) {
+			if (!platforms.isEmpty()) {
 				for (Platform platform : platforms) {
 					g.setColor(Color.GRAY);
 					g.fillRect((int) platform.getX(), (int) platform.getY(), (int) platform.getWidth(),
@@ -230,11 +247,10 @@ public class IntroView extends JPanel {
 							(int) platform.getWidth(), (int) platform.getHeight(), this);
 				}
 			}
+
 			if (!enemies.isEmpty()) {
 				// paint enemies
 				for (Enemy enemy : enemies) {
-					// g.drawRect((int)enemy.getX(), (int)enemy.getY(), (int)enemy.getWidth(),
-					// (int)enemy.getHeight());
 					ImageObject enemyImg = characterImages.get(enemy.getName());
 					int direct = enemy.getDirection();
 					int imgX = (int) enemy.getX() - ((enemyImg.getWidth() - (int) enemy.getWidth()) / 2);
@@ -242,7 +258,6 @@ public class IntroView extends JPanel {
 					g.drawImage(enemyImg.show(direct), imgX, imgY, enemyImg.getWidth(), enemyImg.getHeight(), this);
 				}
 			}
-			
 
 			// paint ground
 			g.setColor(Color.GRAY);
@@ -252,39 +267,36 @@ public class IntroView extends JPanel {
 					(int) ground.getHeight(), this);
 
 			// paint collectibles
-			if(!collectibles.isEmpty()) {
+			if (!collectibles.isEmpty()) {
 				for (Collectible collectible : collectibles) {
 					ImageObject collectibleImg = characterImages.get(collectible.getName());
 					g.drawImage(collectibleImg.show(0), (int) collectible.getX(), (int) collectible.getY(),
 							(int) collectible.getWidth(), (int) collectible.getHeight(), this);
 				}
 			}
-			
 
 			// paint collected
-			if(!collected.isEmpty()) {
+			if (!collected.isEmpty()) {
 				for (Collectible collectible : collected) {
 					ImageObject collectedImg = characterImages.get(collectible.getName());
 					g.drawImage(collectedImg.show(0), (int) collectible.getX(), (int) collectible.getY(),
 							(int) collectible.getWidth(), (int) collectible.getHeight(), this);
 				}
 			}
-			
 
 			// paint facts
 			Fact.setxLoc(GameTimeBarXPos + 100);
 			Fact.setyLoc(GameTimeBarYPos + GameTimeBarHeight);
-			if(!facts.isEmpty()) {
+			if (!facts.isEmpty()) {
 				for (Fact fact : facts) {
 					ImageObject factImg = characterImages.get(fact.getName());
 					g.drawImage(factImg.show(Fact.getPicIter()), (int) fact.getX(), (int) fact.getY(),
 							(int) fact.getWidth(), (int) fact.getHeight(), this);
 				}
 			}
-			
 
 			// paint chests
-			if(!chests.isEmpty()) {
+			if (!chests.isEmpty()) {
 				for (Chest chest : chests) {
 					ImageObject chestImg = characterImages.get(chest.getName());
 					g.drawImage(chestImg.show(0), (int) chest.getX(), (int) chest.getY(), (int) chest.getWidth(),
@@ -292,7 +304,7 @@ public class IntroView extends JPanel {
 					chestStatus = chest.getIsOpen();
 				}
 			}
-			
+
 			// if game is in change character mode
 		} else if (changeCharacterMode) {
 			try {
@@ -517,10 +529,9 @@ public class IntroView extends JPanel {
 		return frame;
 	}
 
-
 	// *************************************************
 	// Setters
-	
+
 	/**
 	 * sets the intro room number
 	 *
@@ -573,7 +584,6 @@ public class IntroView extends JPanel {
 	 *            - Sets the gameTimeLeft to int gameTimeLeft
 	 */
 	public void setGameTime(int gameTimeLeft) {
-		this.gameTimeLeft = gameTimeLeft;
 	}
 
 	/**
@@ -624,23 +634,56 @@ public class IntroView extends JPanel {
 		this.ground = ground;
 	}
 
+	/**
+	 * Sets the View.enemies to the enemies passed in, to be drawn in another method
+	 * 
+	 * @param enemies
+	 *            - The enemies appearing in the game
+	 */
 	public void setEnemies(ArrayList<Enemy> enemies) {
 		this.enemies = enemies;
 	}
 
+	/**
+	 * Sets the View.collectibles to the collectibles passed in, to be drawn in
+	 * another method
+	 * 
+	 * @param collectibles
+	 *            - The collectibles appearing in the game
+	 */
 	public void setCollectibles(ArrayList<Collectible> collectibles) {
 		this.collectibles = collectibles;
 	}
 
+	/**
+	 * Sets the View.collected to the collected passed in, to be drawn in another
+	 * method
+	 * 
+	 * @param collected
+	 *            - The collected appearing in the game
+	 */
 	public void setCollected(ArrayList<Collectible> collected) {
 		this.collected = collected;
 	}
 
+	/**
+	 * Sets the View.facts to the facts passed in, to be drawn in another method
+	 * 
+	 * @param facts
+	 *            - The facts appearing in the game
+	 */
 	public void setFacts(ArrayList<Fact> facts) {
 		this.facts = facts;
 	}
 
+	/**
+	 * Sets the View.chests to the chests passed in, to be drawn in another method
+	 * 
+	 * @param chests
+	 *            - The chests appearing in the game
+	 */
 	public void setChests(ArrayList<Chest> chests) {
 		this.chests = chests;
 	}
+
 }

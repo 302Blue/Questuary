@@ -659,22 +659,54 @@ public class View extends JPanel {
 		this.ground = ground;
 	}
 
+	/**
+	 * Sets the View.enemies to the enemies passed in, to be drawn in another method
+	 * 
+	 * @param enemies
+	 *            - The enemies appearing in the game
+	 */
 	public void setEnemies(ArrayList<Enemy> enemies) {
 		this.enemies = enemies;
 	}
 
+	/**
+	 * Sets the View.collectibles to the collectibles passed in, to be drawn in
+	 * another method
+	 * 
+	 * @param collectibles
+	 *            - The collectibles appearing in the game
+	 */
 	public void setCollectibles(ArrayList<Collectible> collectibles) {
 		this.collectibles = collectibles;
 	}
 
+	/**
+	 * Sets the View.collected to the collected passed in, to be drawn in another
+	 * method
+	 * 
+	 * @param collected
+	 *            - The collected appearing in the game
+	 */
 	public void setCollected(ArrayList<Collectible> collected) {
 		this.collected = collected;
 	}
 
+	/**
+	 * Sets the View.facts to the facts passed in, to be drawn in another method
+	 * 
+	 * @param facts
+	 *            - The facts appearing in the game
+	 */
 	public void setFacts(ArrayList<Fact> facts) {
 		this.facts = facts;
 	}
 
+	/**
+	 * Sets the View.chests to the chests passed in, to be drawn in another method
+	 * 
+	 * @param chests
+	 *            - The chests appearing in the game
+	 */
 	public void setChests(ArrayList<Chest> chests) {
 		this.chests = chests;
 	}
