@@ -533,9 +533,11 @@ public class IntroView extends JPanel {
 	// Setters
 
 	/**
-	 * sets the intro room number
+	 * Sets the intro room number
+	 * 
+	 * @param introRoomNum - Which intro room the user is
 	 *
-	 * @return int - room number of Intro
+	 *
 	 */
 	public void setIntroRoomNum(int introRoomNum) {
 		this.introRoomNum = introRoomNum;

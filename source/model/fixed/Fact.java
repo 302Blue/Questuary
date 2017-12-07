@@ -19,6 +19,8 @@ public class Fact extends StaticObject {
 
 	/**
 	 * Constructor for the facts
+	 * 
+	 * @param introMode - Whether or not the game is in introMode
 	 */
 	public Fact(boolean introMode) {
 		super.setName("fact");

@@ -101,6 +101,8 @@ public class Model {
 
 	/**
 	 * Constructor for Model
+	 * 
+	 * @param isIntroMode - Whether or not model is in introMode
 	 */
 	public Model(boolean isIntroMode) {
 
@@ -473,6 +475,8 @@ public class Model {
 
 	/**
 	 * Method to increment score
+	 * 
+	 * @param i - Number to increment score by
 	 */
 	public void incrementPlayerScoreBy(int i) {
 		player.incrementScoreBy(i);
