@@ -13,82 +13,82 @@ import model.Model;
 import view.IntroView;
 
 public class IntroController {
-	
+
 	// *************************************************
-		// Fields
-		Model model;
-		IntroView view;
-		JFrame frame;
-		// IntroductionView intro = new IntroductionView(frame);
-		Timer timer;
-		ArrayList<Integer> keys = new ArrayList<Integer>();
-		
-		boolean isIntroMode = true;
+	// Fields
 
-		// *************************************************
-		// Constructor
+	Model model;
+	IntroView view;
+	JFrame frame;
+	// IntroductionView intro = new IntroductionView(frame);
+	Timer timer;
+	ArrayList<Integer> keys = new ArrayList<Integer>();
 
+	boolean isIntroMode = true;
+
+	// *************************************************
+	// Constructor
+
+	/**
+	 * Constructor for the Controller class
+	 */
+	public IntroController() {
+		// create the Model and View
+		model = new Model(isIntroMode);
+		view = new IntroView();
+
+		// get the ground from model
+		view.setGroundImage(model.getGround());
+
+		view.setPlatforms(model.getPlatforms());
+		// update the view of the player's location
+
+		view.setEnemies(model.getEnemies());
+		view.setCollectibles(model.getCollectibles());
+		view.setCollected(model.getCollected());
+		view.setFacts(model.getFacts());
+		view.setChests(model.getChests());
+		view.setScore(model.getScore());
+
+		view.updateView(model.getPlayerX(), model.getPlayerY(), model.getPlayerDirection(), model.getPlayerCharacter(),
+				model.getPlayerHealth());
+
+		// set the frame to add on key event listeners
+		frame = view.getFrame();
+
+		// add KeyListeners
+		frame.addKeyListener(new ArrowKeyListener());
+
+		timer = new Timer(45, new UpdateView());
+		timer.start();
+
+	}
+
+	// *************************************************
+	// Methods
+
+	/**
+	 * Main method to start the program
+	 * 
+	 * @param args
+	 *            - Basic argument for a main function
+	 */
+	public static void main(String[] args) {
+		System.out.println("GET READY TO RRRUUUUUUUMMMMBBBLLLLLEEEE!!");
+		IntroController Intro = new IntroController();
+	}
+
+	/**
+	 * @author Andrew Baldwin, Matt Billone, David Chan, Akash Sharma, Vineeth Gutta
+	 */
+	public class UpdateView implements ActionListener {
 		/**
-		 * Constructor for the Controller class
-		 */
-		public IntroController() {
-			// create the Model and View
-			model = new Model(isIntroMode);
-			view = new IntroView();
-
-			// get the ground from model
-			view.setGroundImage(model.getGround());
-
-			view.setPlatforms(model.getPlatforms());
-			// update the view of the player's location
-			
-			view.setEnemies(model.getEnemies());
-			view.setCollectibles(model.getCollectibles());
-			view.setCollected(model.getCollected());
-			view.setFacts(model.getFacts());
-			view.setChests(model.getChests());
-			view.setScore(model.getScore());
-			
-			view.updateView(model.getPlayerX(), model.getPlayerY(), model.getPlayerDirection(), model.getPlayerCharacter(),
-					model.getPlayerHealth());
-
-			// set the frame to add on key event listeners
-			frame = view.getFrame();
-
-			// add KeyListeners
-			frame.addKeyListener(new ArrowKeyListener());
-
-			timer = new Timer(45, new UpdateView());
-			timer.start();
-			
-
-		}
-
-		// *************************************************
-		// Methods
-
-		/**
-		 * Main method to start the program
+		 * Method to carry out actions every time an event is occurs
 		 * 
-		 * @param args
-		 *            - Basic argument for a main function
+		 * @param arg0
+		 *            - Basic argument for a the actionPerformed function
 		 */
-		public static void main(String[] args) {
-			System.out.println("GET READY TO RRRUUUUUUUMMMMBBBLLLLLEEEE!!");
-			IntroController Intro = new IntroController();
-		}
-
-		/**
-		 * @author Andrew Baldwin, Matt Billone, David Chan, Akash Sharma, Vineeth Gutta
-		 */
-		public class UpdateView implements ActionListener {
-			/**
-			 * Method to carry out actions every time an event is occurs
-			 * 
-			 * @param arg0
-			 *            - Basic argument for a the actionPerformed function
-			 */
-			public void actionPerformed(ActionEvent arg0) {
+		public void actionPerformed(ActionEvent arg0) {
 
 			model.changeRoom();
 			model.checkCollision();
@@ -98,17 +98,17 @@ public class IntroController {
 			// move the enemies
 			model.moveEnemies();
 			model.checkIsGameOver();
-			
+
 			// update the view and draw the image
 			view.setPlatforms(model.getPlatforms());
-			
+
 			view.setEnemies(model.getEnemies());
 			view.setCollectibles(model.getCollectibles());
 			view.setCollected(model.getCollected());
 			view.setFacts(model.getFacts());
 			view.setChests(model.getChests());
 			view.setScore(model.getScore());
-			
+
 			view.setPicNum();
 
 			if (model.getPlayerDx() != 0 || model.getPlayerDy() != 0) {
@@ -118,31 +118,29 @@ public class IntroController {
 			}
 
 			view.setIntroRoomNum(model.getIntroRoomNum());
-			
+
 			view.updateView(model.getPlayerX(), model.getPlayerY(), model.getPlayerDirection(),
 					model.getPlayerCharacter(), model.getPlayerHealth());
-				
-			
-			}
-			
-			
+
 		}
 
-		// *************************************************
-		// KeyListener Methods
+	}
 
+	// *************************************************
+	// KeyListener Methods
+
+	/**
+	 * @author Andrew Baldwin, Matt Billone, David Chan, Akash Sharma, Vineeth Gutta
+	 *         ArrowKeyListener used by all aspects of game except for questionMode
+	 */
+	public class ArrowKeyListener implements KeyListener {
 		/**
-		 * @author Andrew Baldwin, Matt Billone, David Chan, Akash Sharma, Vineeth Gutta
-		 *         ArrowKeyListener used by all aspects of game except for questionMode
+		 * Listener method to handle whenever a key is pressed
+		 * 
+		 * @param e
+		 *            - KeyEvent argument passed in whenever the listener catches a key
+		 *            press
 		 */
-		public class ArrowKeyListener implements KeyListener {
-			/**
-			 * Listener method to handle whenever a key is pressed
-			 * 
-			 * @param e
-			 *            - KeyEvent argument passed in whenever the listener catches a key
-			 *            press
-			 */
 		public void keyPressed(KeyEvent e) {
 			// add key code in arrayList if pressed and not already there
 			if (!keys.contains(e.getKeyCode())) {
@@ -242,49 +240,45 @@ public class IntroController {
 
 		}
 
-			/**
-			 * KeyListener method for whenever a key is typed (required for ArrowKeyListener
-			 * class, will be unused
-			 * 
-			 * @param e
-			 *            - KeyEvent argument passed in whenever the listener catches a key
-			 *            typed
-			 */
-			public void keyTyped(KeyEvent e) {
-			}
-
-			/**
-			 * KeyListener method for whenever a key is released
-			 * 
-			 * @param e
-			 *            - KeyEvent argument passed in whenever the listener catches a key
-			 *            release
-			 */
-			public void keyReleased(KeyEvent e) {
-				// removes key code from arrayList once released
-				if (keys.contains(e.getKeyCode())) {
-					keys.remove(keys.indexOf(e.getKeyCode()));
-				}
-				switch (e.getKeyCode()) {
-				// when right arrow is released the dx is 0
-				case (KeyEvent.VK_RIGHT):
-					model.setPlayerDxOff();
-					view.setAnimation(false);
-					System.out.println("Right Key Released");
-					break;
-				case (KeyEvent.VK_LEFT):
-					// make player go left in model
-					model.setPlayerDxOff();
-					view.setAnimation(false);
-					System.out.println("Left Key Released");
-					break;
-				}
-
-			}
+		/**
+		 * KeyListener method for whenever a key is typed (required for ArrowKeyListener
+		 * class, will be unused
+		 * 
+		 * @param e
+		 *            - KeyEvent argument passed in whenever the listener catches a key
+		 *            typed
+		 */
+		public void keyTyped(KeyEvent e) {
 		}
 
-		
+		/**
+		 * KeyListener method for whenever a key is released
+		 * 
+		 * @param e
+		 *            - KeyEvent argument passed in whenever the listener catches a key
+		 *            release
+		 */
+		public void keyReleased(KeyEvent e) {
+			// removes key code from arrayList once released
+			if (keys.contains(e.getKeyCode())) {
+				keys.remove(keys.indexOf(e.getKeyCode()));
+			}
+			switch (e.getKeyCode()) {
+			// when right arrow is released the dx is 0
+			case (KeyEvent.VK_RIGHT):
+				model.setPlayerDxOff();
+				view.setAnimation(false);
+				System.out.println("Right Key Released");
+				break;
+			case (KeyEvent.VK_LEFT):
+				// make player go left in model
+				model.setPlayerDxOff();
+				view.setAnimation(false);
+				System.out.println("Left Key Released");
+				break;
+			}
 
-	
+		}
+	}
 
 }
