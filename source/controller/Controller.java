@@ -128,9 +128,6 @@ public class Controller {
 		 *            - Basic argument for a the actionPerformed function
 		 */
 		public void actionPerformed(ActionEvent arg0) {
-			System.out.println("Controller Time: " + gameTimeLeft);
-			System.out.println("Model Time: " + model.getGameTimeLeft());
-			System.out.println("Model Game Over: " + model.getIsGameOver());
 			if (gameTimeLeft < 1) {
 				gameTimer.stop();
 			}
