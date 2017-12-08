@@ -1,4 +1,4 @@
-package JavaTest;
+package test;
 
 import static org.junit.Assert.assertEquals;
 
@@ -11,21 +11,29 @@ import model.*;
 import model.dynamic.*;
 
 public class ModelTest {
+	
+	// *************************************************
+		// Fields
 
 	Model m = new Model(false);
+	
+	// *************************************************
+		// Methods
 
-	// move the player right
+	/**
+	 * Testing moving the player to the right
+	 */
 	@Test
 	public void testPlayerMoveRight() {
 		//starting coordinates of the player
 		System.out.println("Test if player is moving right");
 		int x = m.getPlayerX();
-		System.out.println("old postion: " + x);
+		System.out.println("Old postion: " + x);
 		//set the player's dx
 		m.playerMoveRight();
 		m.movePlayer();
 		int currentX = m.getPlayerX();
-		System.out.println("new postion: " + currentX);
+		System.out.println("New postion: " + currentX);
 		int distance = currentX - x;
 		System.out.println("Distance traveled: " + distance);
 		System.out.println("Player dx: " + m.getPlayerDx());
@@ -37,7 +45,10 @@ public class ModelTest {
 		assertEquals(m.getPlayerDirectionString(), "RIGHT");
 	}
 	
-	//move the player to the left
+	
+	/**
+	 * Testing moving the player to the left
+	 */
 	@Test
 	public void testPlayerMoveLeft() {
 		System.out.println("\nTest if player is moving left");
@@ -60,7 +71,9 @@ public class ModelTest {
 	}
 	
 
-	//tests if enemies are moving
+	/**
+	 * Testing enemy movement
+	 */
 	@Test
 	public void testMovingEnemies() {
 		System.out.println("\nTest moving enemies");
@@ -82,7 +95,9 @@ public class ModelTest {
 		assertEquals(Math.abs(distance), 4);
 	}
 	
-	// Tests changes character 
+	/**
+	 * Testing changing the character
+	 */
 		@Test
 		public void testChangeCharacter() {
 			System.out.println("\nTest player change character");
@@ -93,6 +108,9 @@ public class ModelTest {
 			assertEquals("bird", m.getPlayerCharacter());
 		}
 		
+		/**
+		 * Testing the change character mode
+		 */		
 		@Test
 		public void testChangeCharacterMode() {
 			System.out.println("\nTest Change Character Mode getter");
@@ -102,7 +120,9 @@ public class ModelTest {
 			assertEquals(true, result);
 		}
 	
-	// adds additional health
+		/**
+		 * Testing adding health
+		 */
 	@Test
 	public void testAddHealth() {
 		System.out.println("\nTest player add health");
@@ -113,7 +133,9 @@ public class ModelTest {
 		assertEquals(prvHeath + 1, m.getPlayerHealth());
 	}
 
-	// adds to player score
+	/**
+	 * Testing adding score
+	 */
 	@Test
 	public void testAddScore() {		
 		System.out.println("\nTest player add score");
@@ -124,7 +146,9 @@ public class ModelTest {
 		assertEquals(50, m.getPlayerScore());
 	}
 	
-	// Tests new highScore
+	/**
+	 * Testing a new high score
+	 */
 	@Test
 	public void testNewHighScore() {
 		System.out.println("\nTest if it is a new High Score");
@@ -139,7 +163,9 @@ public class ModelTest {
 		assertEquals(true, isNewHighScore);
 	}
 	
-	// Tests new set name function
+	/**
+	 * Testing the set name function
+	 */
 	@Test
 	public void testSetName() {
 		System.out.println("\nTest set name function");
@@ -147,7 +173,9 @@ public class ModelTest {
 		assertEquals("Akash", m.getPlayerName());
 	}
 	
-	//tests game over mode
+	/**
+	 * Testing the game over mode
+	 */
 	@Test
 	public void testGameOver() {
 		Model m1 = new Model(false);
@@ -156,7 +184,9 @@ public class ModelTest {
 		assertEquals(true, m1.getIsGameOver());
 	}
 	
-	// tests if game is paused when in change character mode
+	/**
+	 * Testing the game paused mode
+	 */
 	@Test
 	public void testIsGamePaused() {
 		Model m2 = new Model(false);
@@ -165,7 +195,9 @@ public class ModelTest {
 		assertEquals(true, m2.getIsGamePaused());
 	}
 
-	// Change Room test
+	/**
+	 * Testing the change room function
+	 */
 	@Test
 	public void testChangeRoom() {	
 		Model intro = new Model(true);
@@ -185,7 +217,9 @@ public class ModelTest {
 		assertEquals(1, intro.getIntroRoomNum());
 	}
 	
-	//Test the getter for xBoundary
+	/**
+	 * Testing the get x boundary
+	 */
 	@Test
 	public void testGetXBoundary() {
 		Model j = new Model(false);
@@ -204,7 +238,9 @@ public class ModelTest {
 		
 	}
 	
-	//Test getter for y Boundary
+	/**
+	 * Testing the get y boundary
+	 */
 	@Test
 	public void testGetYBoundary() {
 		Model j = new Model(false);
@@ -225,7 +261,9 @@ public class ModelTest {
 		
 	}
 	
-	//test the setting and getting of question mode
+	/**
+	 * Testing the question mode
+	 */
 	@Test
 	public void testIsQuestionMode() {
 		System.out.println("\nTest Question Mode getter");
@@ -235,7 +273,9 @@ public class ModelTest {
 		assertEquals(true, result);
 	}
 	
-	//test if the player is falling, should be true since the player is always falling due to gravity
+	/**
+	 * Testing the player falling functions
+	 */
 	@Test
 	public void testIsPlayerFalling() {
 		System.out.println("\nTest is Player falling");
@@ -244,7 +284,9 @@ public class ModelTest {
 		assertEquals(true, result);
 	}
 	
-	//test if the player is jumping, should be false
+	/**
+	 * Testing the player jumping functions
+	 */
 	@Test
 	public void testIsPlayerJumping() {
 		System.out.println("\nTest is Player jumping");
