@@ -199,7 +199,7 @@ public class IntroView extends JPanel {
 				imageWidth = imageWidth*2;
 				
 				g.drawImage(downrightKey, (int)(screenWidth/2 - imageWidth), (int)(screenHeight/3), imageWidth, imageHeight, this);
-				g.drawString("DOWN & RIGHT = Change Characters", (int)(screenWidth/2 - imageWidth*2.6), (int)(screenHeight/3 + imageHeight*1.5));
+				g.drawString("DOWN THEN RIGHT = Change Characters", (int)(screenWidth/2 - imageWidth*2.6), (int)(screenHeight/3 + imageHeight*1.5));
 			} catch (IOException except) { except.printStackTrace(); }
 			break;
 		case 2:
@@ -533,9 +533,11 @@ public class IntroView extends JPanel {
 	// Setters
 
 	/**
-	 * sets the intro room number
+	 * Sets the intro room number
+	 * 
+	 * @param introRoomNum - Which intro room the user is
 	 *
-	 * @return int - room number of Intro
+	 *
 	 */
 	public void setIntroRoomNum(int introRoomNum) {
 		this.introRoomNum = introRoomNum;

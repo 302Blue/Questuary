@@ -8,14 +8,14 @@ import java.awt.Toolkit;
  */
 public abstract class StaticObject extends Rectangle {
 
-	String name;
-
 	// *************************************************
 	// Fields
 	
 	private double screenWidth = Toolkit.getDefaultToolkit().getScreenSize().getWidth();
 	private double screenHeight = Toolkit.getDefaultToolkit().getScreenSize().getHeight();
 	private double screenRatio = screenHeight / screenWidth;
+	
+	String name;
 
 	// *************************************************
 	// Getters

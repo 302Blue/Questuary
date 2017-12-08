@@ -384,12 +384,13 @@ public class View extends JPanel {
 		JLabel questionLabel = new JLabel("<html>" + q.getQuestion() + "<html>");
 		questionLabel.setHorizontalAlignment(JLabel.LEFT);
 		questionLabel.setHorizontalAlignment(JLabel.CENTER);
-		questionLabel.setFont(new Font("SansSerif", Font.BOLD, 25));
+		questionLabel.setFont(new Font("SansSerif", Font.BOLD, 35));
 
 		questionBox = Box.createVerticalBox();
 		questionBox.add(questionLabel);
 
 		JLabel label2 = new JLabel("After a delay, use UP and DOWN key to move and RIGHT key to select");
+		label2.setFont(new Font("SansSerif", Font.BOLD, 20));
 		label2.setHorizontalAlignment(JLabel.LEFT);
 		label2.setHorizontalAlignment(JLabel.CENTER);
 

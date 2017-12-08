@@ -78,6 +78,9 @@ public class IntroController {
 		IntroController Intro = new IntroController();
 	}
 
+	// *************************************************
+	// Update Game State
+
 	/**
 	 * @author Andrew Baldwin, Matt Billone, David Chan, Akash Sharma, Vineeth Gutta
 	 */

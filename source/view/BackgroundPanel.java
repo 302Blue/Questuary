@@ -33,6 +33,10 @@ import javax.swing.JViewport;
  * 
  */
 public class BackgroundPanel extends JPanel {
+
+	// *************************************************
+	// Fields
+
 	public static final int SCALED = 0;
 	public static final int TILED = 1;
 	public static final int ACTUAL = 2;
@@ -44,6 +48,9 @@ public class BackgroundPanel extends JPanel {
 	private float alignmentY = 0.5f;
 	private boolean isTransparentAdd = true;
 
+	// *************************************************
+	// Constructor
+
 	/**
 	 * Set image as the background with the SCALED style
 	 * 
@@ -54,6 +61,17 @@ public class BackgroundPanel extends JPanel {
 		this(image, SCALED);
 	}
 
+	/**
+	 * Use the Paint interface to paint a background
+	 * 
+	 * @param painter
+	 *            - Painter to be used as the background image
+	 */
+	public BackgroundPanel(Paint painter) {
+		setPaint(painter);
+		setLayout(new BorderLayout());
+	}
+	
 	/**
 	 * Set image as the background with the specified style
 	 * 
@@ -88,15 +106,165 @@ public class BackgroundPanel extends JPanel {
 		setLayout(new BorderLayout());
 	}
 
+
+	// *************************************************
+	// Methods
+
 	/**
-	 * Use the Paint interface to paint a background
+	 * Try to make the component transparent. For components that use renderers,
+	 * like JTable, you will also need to change the renderer to be transparent. An
+	 * easy way to do this it to set the background of the table to a Color using an
 	 * 
-	 * @param painter - Painter to be used as the background image
+	 * @param component
+	 *            - JComponent to make transparent
 	 */
-	public BackgroundPanel(Paint painter) {
-		setPaint(painter);
-		setLayout(new BorderLayout());
+	private void makeComponentTransparent(JComponent component) {
+		component.setOpaque(false);
+
+		if (component instanceof JScrollPane) {
+			JScrollPane scrollPane = (JScrollPane) component;
+			JViewport viewport = scrollPane.getViewport();
+			viewport.setOpaque(false);
+			Component c = viewport.getView();
+
+			if (c instanceof JComponent) {
+				((JComponent) c).setOpaque(false);
+			}
+		}
 	}
+
+	/**
+	 * Custom painting code for drawing a SCALED image as the background
+	 * 
+	 * @param g
+	 *            - Graphics to draw the scaled image on
+	 */
+	private void drawScaled(Graphics g) {
+		Dimension d = getSize();
+		g.drawImage(image, 0, 0, d.width, d.height, null);
+	}
+
+	/**
+	 * Custom painting code for drawing TILED images as the background
+	 * 
+	 * @param g
+	 *            - Graphics to draw the tiled image on
+	 */
+	private void drawTiled(Graphics g) {
+		Dimension d = getSize();
+		int width = image.getWidth(null);
+		int height = image.getHeight(null);
+
+		for (int x = 0; x < d.width; x += width) {
+			for (int y = 0; y < d.height; y += height) {
+				g.drawImage(image, x, y, null, null);
+			}
+		}
+	}
+
+	/**
+	 * Custom painting code for drawing the ACTUAL image as the background. The
+	 * image is positioned in the panel based on the horizontal and vertical
+	 * alignments specified.
+	 * 
+	 * @param g
+	 *            - Graphics to draw the actual image on
+	 */
+	private void drawActual(Graphics g) {
+		Dimension d = getSize();
+		Insets insets = getInsets();
+		int width = d.width - insets.left - insets.right;
+		int height = d.height - insets.top - insets.left;
+		float x = (width - image.getWidth(null)) * alignmentX;
+		float y = (height - image.getHeight(null)) * alignmentY;
+		g.drawImage(image, (int) x + insets.left, (int) y + insets.top, this);
+	}
+
+	/**
+	 * Add custom painting
+	 * 
+	 * @param g
+	 *            - Graphics to be painted on
+	 * 
+	 */
+	@Override
+	protected void paintComponent(Graphics g) {
+		super.paintComponent(g);
+
+		// Invoke the painter for the background
+
+		if (painter != null) {
+			Dimension d = getSize();
+			Graphics2D g2 = (Graphics2D) g;
+			g2.setPaint(painter);
+			g2.fill(new Rectangle(0, 0, d.width, d.height));
+		}
+
+		// Draw the image
+
+		if (image == null)
+			return;
+
+		switch (style) {
+		case SCALED:
+			drawScaled(g);
+			break;
+
+		case TILED:
+			drawTiled(g);
+			break;
+
+		case ACTUAL:
+			drawActual(g);
+			break;
+
+		default:
+			drawScaled(g);
+		}
+	}
+
+	/**
+	 * Override method so we can make the component transparent
+	 * 
+	 * @param component
+	 *            - JComponent to used to make the component transparent
+	 */
+	public void add(JComponent component) {
+		add(component, null);
+	}
+
+	/**
+	 * Override method so we can make the component transparent
+	 * 
+	 * @param component
+	 *            - JComponent to used to make the component transparent
+	 * @param constraints
+	 *            - Object with constraints for the image
+	 */
+	public void add(JComponent component, Object constraints) {
+		if (isTransparentAdd) {
+			makeComponentTransparent(component);
+		}
+
+		super.add(component, constraints);
+	}
+
+	// *************************************************
+	// Getters
+
+	/**
+	 * Override to provide a preferred size equal to the image size
+	 */
+	@Override
+	public Dimension getPreferredSize() {
+		if (image == null)
+			return super.getPreferredSize();
+		else
+			return new Dimension(image.getWidth(null), image.getHeight(null));
+	}
+
+	// *************************************************
+	// Setters
 
 	/**
 	 * Set the image used as the background
@@ -153,43 +321,6 @@ public class BackgroundPanel extends JPanel {
 	}
 
 	/**
-	 * Override method so we can make the component transparent
-	 * 
-	 * @param component
-	 *            - JComponent to used to make the component transparent
-	 */
-	public void add(JComponent component) {
-		add(component, null);
-	}
-
-	/**
-	 * Override to provide a preferred size equal to the image size
-	 */
-	@Override
-	public Dimension getPreferredSize() {
-		if (image == null)
-			return super.getPreferredSize();
-		else
-			return new Dimension(image.getWidth(null), image.getHeight(null));
-	}
-
-	/**
-	 * Override method so we can make the component transparent
-	 * 
-	 * @param component
-	 *            - JComponent to used to make the component transparent
-	 * @param constraints
-	 *            - Object with constraints for the image
-	 */
-	public void add(JComponent component, Object constraints) {
-		if (isTransparentAdd) {
-			makeComponentTransparent(component);
-		}
-
-		super.add(component, constraints);
-	}
-
-	/**
 	 * Controls whether components added to this panel should automatically be made
 	 * transparent. That is, setOpaque(false) will be invoked. The default is set to
 	 * true.
@@ -202,116 +333,4 @@ public class BackgroundPanel extends JPanel {
 		this.isTransparentAdd = isTransparentAdd;
 	}
 
-	/**
-	 * Try to make the component transparent. For components that use renderers,
-	 * like JTable, you will also need to change the renderer to be transparent. An
-	 * easy way to do this it to set the background of the table to a Color using an
-	 * 
-	 * @param component
-	 *            - JComponent to make transparent
-	 */
-	private void makeComponentTransparent(JComponent component) {
-		component.setOpaque(false);
-
-		if (component instanceof JScrollPane) {
-			JScrollPane scrollPane = (JScrollPane) component;
-			JViewport viewport = scrollPane.getViewport();
-			viewport.setOpaque(false);
-			Component c = viewport.getView();
-
-			if (c instanceof JComponent) {
-				((JComponent) c).setOpaque(false);
-			}
-		}
-	}
-
-	/**
-	 * Add custom painting
-	 * 
-	 * @param g
-	 *            - Graphics to be painted on
-	 * 
-	 */
-	@Override
-	protected void paintComponent(Graphics g) {
-		super.paintComponent(g);
-
-		// Invoke the painter for the background
-
-		if (painter != null) {
-			Dimension d = getSize();
-			Graphics2D g2 = (Graphics2D) g;
-			g2.setPaint(painter);
-			g2.fill(new Rectangle(0, 0, d.width, d.height));
-		}
-
-		// Draw the image
-
-		if (image == null)
-			return;
-
-		switch (style) {
-		case SCALED:
-			drawScaled(g);
-			break;
-
-		case TILED:
-			drawTiled(g);
-			break;
-
-		case ACTUAL:
-			drawActual(g);
-			break;
-
-		default:
-			drawScaled(g);
-		}
-	}
-
-	/**
-	 * Custom painting code for drawing a SCALED image as the background
-	 * 
-	 * @param g
-	 *            - Graphics to draw the scaled image on
-	 */
-	private void drawScaled(Graphics g) {
-		Dimension d = getSize();
-		g.drawImage(image, 0, 0, d.width, d.height, null);
-	}
-
-	/**
-	 * Custom painting code for drawing TILED images as the background
-	 * 
-	 * @param g
-	 *            - Graphics to draw the tiled image on
-	 */
-	private void drawTiled(Graphics g) {
-		Dimension d = getSize();
-		int width = image.getWidth(null);
-		int height = image.getHeight(null);
-
-		for (int x = 0; x < d.width; x += width) {
-			for (int y = 0; y < d.height; y += height) {
-				g.drawImage(image, x, y, null, null);
-			}
-		}
-	}
-
-	/**
-	 * Custom painting code for drawing the ACTUAL image as the background. The
-	 * image is positioned in the panel based on the horizontal and vertical
-	 * alignments specified.
-	 * 
-	 * @param g
-	 *            - Graphics to draw the actual image on
-	 */
-	private void drawActual(Graphics g) {
-		Dimension d = getSize();
-		Insets insets = getInsets();
-		int width = d.width - insets.left - insets.right;
-		int height = d.height - insets.top - insets.left;
-		float x = (width - image.getWidth(null)) * alignmentX;
-		float y = (height - image.getHeight(null)) * alignmentY;
-		g.drawImage(image, (int) x + insets.left, (int) y + insets.top, this);
-	}
 }

@@ -38,3 +38,5 @@ Ground Image - Artist: [n4](https://opengameart.org/users/n4); Source: [Seamless
 Heart Image - Artist: [soundemperor](https://opengameart.org/users/soundemperor); Source: [Heart Pixel Art](https://opengameart.org/content/heart-pixel-art)
 
 Platform Image - Artist: [Terrence Harvey's Cisc275 Class](http://www1.udel.edu/CIS/275/tharvey/17F/index.html); Source: [images drawings art.zip](http://www1.udel.edu/CIS/275/tharvey/17F/resources/images%20drawings%20art.zip)
+
+ArrowKey Image - Artist: [InanZen](https://opengameart.org/users/inanzen); Source: [Arrow Keys](https://opengameart.org/content/arrow-keys-wsad-mouse-icon)

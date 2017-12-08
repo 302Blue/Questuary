@@ -335,7 +335,7 @@ public class Player extends DynamicObject {
 	 */
 	public void moveLeft() {
 		if (state.equalsIgnoreCase("bird")) {
-			super.setDx(-5);
+			super.setDx(-10);
 		} else {
 			super.setDx(-20);
 		}
@@ -346,7 +346,7 @@ public class Player extends DynamicObject {
 	 */
 	public void moveRight() {
 		if (state.equalsIgnoreCase("bird")) {
-			super.setDx(5);
+			super.setDx(10);
 		} else {
 			super.setDx(20);
 		}

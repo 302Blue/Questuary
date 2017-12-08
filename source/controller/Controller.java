@@ -31,14 +31,10 @@ public class Controller {
 	// private Long startGameTime;
 	int gameTimeLeft = 180; // minutes in seconds
 
-	// question state
-	private boolean questionModeFlag = true;
-
 	boolean questionMode = false;
 	Question question;
 	JFrame questionFrame;
 	boolean isIntroMode = false;
-	// end question
 
 	// *************************************************
 	// Constructor
@@ -51,8 +47,8 @@ public class Controller {
 		model = new Model(isIntroMode);
 		view = new View();
 		// pauses the game in beginning for intro mode
-		//model.setIsGamePaused();
-		
+		// model.setIsGamePaused();
+
 		// get the ground from model
 		view.setGroundImage(model.getGround());
 
@@ -90,7 +86,7 @@ public class Controller {
 		gameTimer = new Timer(1000, new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
 				gameTimeLeft--;
-				
+
 			}
 		});
 		gameTimer.start();
@@ -112,6 +108,16 @@ public class Controller {
 	}
 
 	/**
+	 * Difficulty handler
+	 */
+	public void difficultyHandler() {
+		model.setPlayerHealth(model.getPlayerHealth() + 2);
+	}
+
+	// *************************************************
+	// Update Game State
+
+	/**
 	 * @author Andrew Baldwin, Matt Billone, David Chan, Akash Sharma, Vineeth Gutta
 	 */
 	public class UpdateView implements ActionListener {
@@ -122,9 +128,6 @@ public class Controller {
 		 *            - Basic argument for a the actionPerformed function
 		 */
 		public void actionPerformed(ActionEvent arg0) {
-			System.out.println("Controller Time: " +gameTimeLeft);
-			System.out.println("Model Time: " +model.getGameTimeLeft());
-			System.out.println("Model Game Over: " +model.getIsGameOver());
 			if (gameTimeLeft < 1) {
 				gameTimer.stop();
 			}
@@ -133,7 +136,7 @@ public class Controller {
 			} else {
 				gameTimer.start();
 			}
-			
+
 			if (!questionMode) {
 				// add checkQuestionMode
 				// if model is in question mode then create the JFrame in view with the
@@ -146,8 +149,7 @@ public class Controller {
 					questionFrame = view.createQuestionFrame(question);
 					questionFrame.addKeyListener(new QuestionKeyListener());
 					questionFrame.requestFocus();
-				}
-				else {
+				} else {
 					gameTimer.start();
 				}
 				// end of QuestionMode
@@ -189,12 +191,12 @@ public class Controller {
 						String name = view.getName();
 						model.setName(name);
 						model.updateHighScore();
-					}else {
+					} else {
 						model.setName(model.getHighScore().split(": ")[0]);
 						model.updateHighScore();
 					}
 					view.setHighScore(model.getHighScore());
-					
+
 					view.gameOverMode();
 				}
 			} else {
@@ -227,7 +229,6 @@ public class Controller {
 			if (model.getIsGameOver()) {
 				switch (keys.get(0)) {
 
-				
 				case (KeyEvent.VK_ESCAPE):
 				case (KeyEvent.VK_Q):
 					// if q or esc pressed then quit
@@ -239,10 +240,11 @@ public class Controller {
 					// something is selected from game over screen
 					frame.dispose();
 					Controller newGame = new Controller();
-				}else if(keys.contains(KeyEvent.VK_SPACE) && keys.contains(KeyEvent.VK_F)) {
+					newGame.difficultyHandler();
+				} else if (keys.contains(KeyEvent.VK_SPACE) && keys.contains(KeyEvent.VK_F)) {
 					model.addBadWord();
 					view.setHighScore(model.getHighScore());
-					
+
 				}
 			}
 
@@ -251,7 +253,7 @@ public class Controller {
 				// checks if game is not in Change player mode
 				if (!model.getChangeCharacterMode() && !model.getIsGameOver()) {
 					switch (keys.get(0)) {
-					
+
 					case (KeyEvent.VK_RIGHT):
 						// if x is less than the xBoundary then increment by xVelocity
 						// make player go right in model
@@ -328,7 +330,7 @@ public class Controller {
 					model.makePlayerJump();
 					System.out.println("Executed: makePlayerJump()");
 				}
-			}	
+			}
 		}
 
 		/**

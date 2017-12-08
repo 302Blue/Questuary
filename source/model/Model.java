@@ -77,8 +77,10 @@ public class Model {
 	private boolean isQuestionMode = false;
 	private boolean isGamePaused = false;
 	private boolean isGameOver = false;
-	// intro Mode fields
 	private boolean isIntroMode;
+	// add Question variables and QuestionMode flag
+	private boolean questionMode = false;
+
 	int introRoomNum = 0;
 	// character number
 	private int changeCharacterCount = 0;
@@ -90,8 +92,6 @@ public class Model {
 	private String name = "";
 	private int gameTimeLeft;
 
-	// add Question variables and QuestionMode flag
-	private boolean questionMode = false;
 	// Object containing the questions
 	private QuestionBank QB = new QuestionBank();
 	private Question question;
@@ -101,6 +101,8 @@ public class Model {
 
 	/**
 	 * Constructor for Model
+	 * 
+	 * @param isIntroMode - Whether or not model is in introMode
 	 */
 	public Model(boolean isIntroMode) {
 
@@ -169,7 +171,7 @@ public class Model {
 		Collectible firstCollectible = new Collectible(platforms.get(randomPlat));
 		Collectible.setHeightIter(0);
 		collectibles.add(firstCollectible);
-		System.out.println("First Collectible Created");
+		//System.out.println("First Collectible Created");
 
 		if (isIntroMode) {
 			platforms.clear();
@@ -231,8 +233,8 @@ public class Model {
 		}
 		// if out of bound then don't increment the x
 		else {
-			System.out.println("Boundary Invalid 0");
-			System.out.println("Player is Out of Left Boundary");
+			//System.out.println("Boundary Invalid 0");
+			//System.out.println("Player is Out of Left Boundary");
 			player.setDxOff();
 		}
 	}
@@ -253,8 +255,8 @@ public class Model {
 			player.moveRight();
 			// System.out.println("ground" + ground.getWidth());
 		} else {
-			System.out.println("Boundary invalid " + xBoundary);
-			System.out.println("Player is Out of Right Boundary");
+			//System.out.println("Boundary invalid " + xBoundary);
+			//System.out.println("Player is Out of Right Boundary");
 			player.setDxOff();
 		}
 	}
@@ -394,7 +396,7 @@ public class Model {
 				numCollected++;
 				player.incrementScoreBy(10);
 				// print score
-				System.out.println("Score: " + player.getScore());
+				//System.out.println("Score: " + player.getScore());
 				// remove collectible from screen
 				collectIter.remove();
 			}
@@ -420,7 +422,7 @@ public class Model {
 					// picks question based on number of collected(facts)
 				}
 				c.setIsOpen(true);
-				System.out.println("Score: " + player.getScore());
+				//System.out.println("Score: " + player.getScore());
 			}
 		}
 	}
@@ -473,6 +475,8 @@ public class Model {
 
 	/**
 	 * Method to increment score
+	 * 
+	 * @param i - Number to increment score by
 	 */
 	public void incrementPlayerScoreBy(int i) {
 		player.incrementScoreBy(i);
@@ -544,7 +548,7 @@ public class Model {
 		if ((numCollected >= 3) && (numCollected > 0)) {
 			int randomPlat = random.nextInt(1);
 			chests.add(new Chest(platforms.get(randomPlat)));
-			System.out.println("New Chest Created");
+			//System.out.println("New Chest Created");
 			chestCreated = true;
 		}
 
@@ -552,19 +556,19 @@ public class Model {
 			int randomNum = random.nextInt(4);
 			if (randomNum == 0) {
 				enemies.add(new EnemyCrab(platform));
-				System.out.println("New Enemy Crab Created");
-			} else if (randomNum == 1) {
+				//System.out.println("New Enemy Crab Created");
+			} else if (randomNum == 1 || randomNum == 2) {
 				collectibles.add(new Collectible(platform));
-				System.out.println("New Collectible Created");
+				//System.out.println("New Collectible Created");
 			} else if (chestCreated) {
 				// force new collectible creation so that chests don't keep getting created
 				collectibles.add(new Collectible(platform));
-				System.out.println("New Collectible Created");
+				//System.out.println("New Collectible Created");
 				chestCreated = false;
 			}
 		}
 		enemies.add(new EnemyOsprey((int) screenWidth, (int) screenHeight));
-		System.out.println("New Enemy Osprey Created");
+		//System.out.println("New Enemy Osprey Created");
 	}
 
 	/**
@@ -619,13 +623,13 @@ public class Model {
 			}
 		}
 	}
-
-	/**
+/*
+	*//**
 	 * Model's main function for demonstrating game functionality
 	 *
 	 * @param args
 	 *            - standard String array for a main function
-	 */
+	 *//*
 	public static void main(String[] args) {
 		System.out.println("Hello World");
 		Model model = new Model(false);
@@ -660,7 +664,7 @@ public class Model {
 			}
 
 		}
-	}
+	}*/
 
 	// *************************************************
 	// Getters
@@ -975,6 +979,17 @@ public class Model {
 	public int getGameTimeLeft() {
 		return gameTimeLeft;
 	}
+	
+	/**
+	 * Getter for the Player Name
+	 * 
+	 * @return int - Current game time left
+	 */
+	public String getPlayerName() {
+		return name;
+	}
+	
+	
 
 	// *************************************************
 	// Setters
@@ -1011,6 +1026,15 @@ public class Model {
 	 */
 	public void setPlayerDxOff() {
 		player.setDxOff();
+	}
+	
+	/**
+	 * Set player's health
+	 * 
+	 * @param i - Set player's health to i
+	 */
+	public void setPlayerHealth(int i) {
+		player.setHealth(i);
 	}
 
 	/**
@@ -1142,6 +1166,13 @@ public class Model {
 				e.printStackTrace();
 			}
 		}
+	}
+	/**
+	 * for testing purposes only
+	 */
+	public void setEnemies() {
+		enemies.clear();
+		enemies.add(new EnemyCrab(platforms.get(0)));
 	}
 
 	/**
