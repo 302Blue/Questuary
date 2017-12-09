@@ -2,6 +2,7 @@ controller
 model
 model.dynamic
 model.fixed
+testing
 view
 view.dynamic
 view.fixed
