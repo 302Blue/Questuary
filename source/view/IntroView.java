@@ -56,6 +56,7 @@ public class IntroView extends JPanel {
 	// get the screen's dimensions
 	final private double screenWidth = Toolkit.getDefaultToolkit().getScreenSize().getWidth();
 	final private double screenHeight = Toolkit.getDefaultToolkit().getScreenSize().getHeight();
+	final private double screenRatio = screenWidth/screenHeight;
 	// player's x and y coordinates
 	int playerX = 0;
 	int playerY = 0;
@@ -174,52 +175,52 @@ public class IntroView extends JPanel {
 		switch (introRoomNum) {
 		case 0:
 			g.setColor(Color.CYAN);
-			g.setFont(new Font("Garamond", Font.BOLD, 50));
+			g.setFont(new Font("Garamond", Font.BOLD, (int) (23*screenRatio)));
 			try {
 				Image leftKey = ImageIO.read(new File("images/intro/LeftKey.png"));
 				Image upKey = ImageIO.read(new File("images/intro/UpKey.png"));
 				Image rightKey = ImageIO.read(new File("images/intro/RightKey.png"));
 				
-				g.drawImage(leftKey, (int)(imageWidth*1.5), (int)(screenHeight/3), imageWidth, imageHeight, this);
-				g.drawString("Left Key = Move Left", 0, (int)(screenHeight/3 + imageHeight*1.5));
+				g.drawImage(leftKey, (int)(imageWidth*1.9), (int)(screenHeight/3), imageWidth, imageHeight, this);
+				g.drawString("Left Key = Move Left", (int) (screenWidth/20), (int)(screenHeight/3 + imageHeight*1.5));
 				
-				g.drawImage(upKey, (int)(screenWidth/2 - imageWidth), (int)(screenHeight/3), imageWidth, imageHeight, this);
-				g.drawString("Up Key = Jump", (int)(screenWidth/2 - imageWidth*2.35), (int)(screenHeight/3 + imageHeight*1.5));
+				g.drawImage(upKey, (int)(screenWidth/2 - imageWidth*0.5), (int)(screenHeight/3), imageWidth, imageHeight, this);
+				g.drawString("Up Key = Jump", (int)(screenWidth/2 - imageWidth*1.5), (int)(screenHeight/3 + imageHeight*1.5));
 				
-				g.drawImage(rightKey, (int)(screenWidth - imageWidth*3.2), (int)(screenHeight/3), imageWidth, imageHeight, this);
-				g.drawString("Right Key = Move Right", (int)(screenWidth - imageWidth*5.2), (int)(screenHeight/3 + imageHeight*1.5));
+				g.drawImage(rightKey, (int)(screenWidth - imageWidth*3), (int)(screenHeight/3), imageWidth, imageHeight, this);
+				g.drawString("Right Key = Move Right", (int)(screenWidth - imageWidth*4.5), (int)(screenHeight/3 + imageHeight*1.5));
 			} catch (IOException except) { except.printStackTrace(); }
 			break;
 		case 1:
 			g.setColor(Color.CYAN);
-			g.setFont(new Font("Garamond", Font.BOLD, 50));
+			g.setFont(new Font("Garamond", Font.BOLD, (int) (23*screenRatio)));
 			
 			try {
 				Image downrightKey = ImageIO.read(new File("images/intro/DownRightKey.png"));
 				imageWidth = imageWidth*2;
 				
-				g.drawImage(downrightKey, (int)(screenWidth/2 - imageWidth), (int)(screenHeight/3), imageWidth, imageHeight, this);
-				g.drawString("DOWN THEN RIGHT = Change Characters", (int)(screenWidth/2 - imageWidth*2.6), (int)(screenHeight/3 + imageHeight*1.5));
+				g.drawImage(downrightKey, (int)(screenWidth/2 - imageWidth/2), (int)(screenHeight/3), imageWidth, imageHeight, this);
+				g.drawString("DOWN THEN RIGHT = Change Characters", (int)(screenWidth/2 - imageWidth*1.9), (int)(screenHeight/3 + imageHeight*1.5));
 			} catch (IOException except) { except.printStackTrace(); }
 			break;
 		case 2:
 			g.setColor(Color.CYAN);
-			g.setFont(new Font("Garamond", Font.BOLD, 50));
+			g.setFont(new Font("Garamond", Font.BOLD, (int) (23*screenRatio)));
 			
-			g.drawString("Each Horseshoe Crab is 10 Points, and Displays A Fact", (int)(screenWidth/4 - imageWidth), (int)(screenHeight/3 + imageHeight*1.5));
-			g.drawString("After Collecting 3 Horseshoe Crabs, A Question Chest Appears ", (int)(screenWidth/4 - imageWidth + 50), (int)(screenHeight/3 + imageHeight*1.5 + 50));
+			g.drawString("Each Horseshoe Crab is 10 Points, and Displays A Fact", (int)(screenWidth/4 - imageWidth*2), (int)(screenHeight/3 + imageHeight*1.5));
+			g.drawString("After Collecting 3 Horseshoe Crabs, A Question Chest Appears ", (int)(screenWidth/4 - imageWidth*2.5), (int)(screenHeight/3 + imageHeight*1.5 + 50));
 			break;
 		case 3:
 			g.setColor(Color.CYAN);
-			g.setFont(new Font("Garamond", Font.BOLD, 50));
+			g.setFont(new Font("Garamond", Font.BOLD, (int) (23*screenRatio)));
 			
-			g.drawString("Avoid The Ospreys!",(int)(screenWidth/2.5 - imageWidth), (int)(screenHeight/3 + imageHeight*1.5));
-			g.drawString("You Can Jump On Top of The Crabs, But Don't Let Them Hit You!", (int)(screenWidth/6 - imageWidth), (int)(screenHeight/3 + imageHeight*1.5 + 50));
+			g.drawString("Avoid The Ospreys!",(int)(screenWidth/2 - imageWidth*1.5), (int)(screenHeight/3 + imageHeight));
+			g.drawString("You Can Jump On Top of The Crabs, But Don't Let Them Hit You!", (int)(screenWidth/5 - imageWidth*2), (int)(screenHeight/3 + imageHeight + 50));
 			
 			try {
 				Image rightKey = ImageIO.read(new File("images/intro/RightKey.png"));
-				g.drawImage(rightKey, (int) (screenWidth * 0.8 + 100), (int) (screenHeight * 0.8) , 100, 100, this);
-				g.drawString("START GAME", (int) (screenWidth * 0.8), (int) (screenHeight * 0.8));
+				g.drawImage(rightKey, (int) (screenWidth * 0.8 - imageWidth/2), (int) (screenHeight * 0.8 - imageHeight) , (int) (100*screenRatio), (int) (100*screenRatio), this);
+				g.drawString("START GAME", (int) (screenWidth * 0.9), (int) (screenHeight * 0.8));
 			} catch (IOException except) { except.printStackTrace(); }
 			break;
 

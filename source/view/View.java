@@ -389,7 +389,7 @@ public class View extends JPanel {
 		questionBox = Box.createVerticalBox();
 		questionBox.add(questionLabel);
 
-		JLabel label2 = new JLabel("After a delay, use UP and DOWN key to move and RIGHT key to select");
+		JLabel label2 = new JLabel("<html> After a delay, use UP and DOWN key to move and RIGHT key to select <html>");
 		label2.setFont(new Font("SansSerif", Font.BOLD, 20));
 		label2.setHorizontalAlignment(JLabel.LEFT);
 		label2.setHorizontalAlignment(JLabel.CENTER);
@@ -464,12 +464,14 @@ public class View extends JPanel {
 		ImageIcon heart = new ImageIcon("images/world/Heart.png");
 		JLabel icon = new JLabel(heart);
 
-		JLabel continueMessage = new JLabel("Press the Right Key to continue your adventure");
-
+		JLabel continueMessage = new JLabel("<html> Press the Right Key to continue your adventure <html>");
+		continueMessage.setFont(new Font("Serif", Font.BOLD, 18));
+		
 		correctBox.add(question);
 		correctBox.add(correctMsg);
 		correctBox.add(healthMessage);
 		correctBox.add(icon);
+		correctBox.add(continueMessage);
 		correctBox.add(continueMessage);
 		correctBox.setVisible(true);
 
@@ -503,13 +505,17 @@ public class View extends JPanel {
 
 		JLabel reason = new JLabel("<html>" + "Explanation: " + q.getReason() + "<html>");
 		reason.setFont(new Font("Monospaced", Font.BOLD, 25));
-
+		
+		JLabel moveOn = new JLabel("<html> Press the Right Key to continue your adventure <html>");
+		moveOn.setFont(new Font("Serif", Font.BOLD, 18));
+		
 		wrongBox.add(question);
 		wrongBox.add(wrongMsg);
 		wrongBox.add(correctMsg);
 		wrongBox.add(correctAnswer);
 		wrongBox.add(reason);
-		wrongBox.add(new JLabel("Press the Right Key to continue your adventure"));
+		wrongBox.add(moveOn);
+		
 
 		wrongBox.setVisible(true);
 
